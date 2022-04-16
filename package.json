@@ -1,6 +1,6 @@
 {
   "name": "bibcite",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Citations with Bibliography",
   "main": "index.js",
   "scripts": {
@@ -25,5 +25,16 @@
   },
   "dependencies": {
     "citation-js": "^0.5.6"
-  }
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelixBenning/bibcite.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FelixBenning/bibcite/issues"
+  },
+  "homepage": "https://github.com/FelixBenning/bibcite#readme"
 }
