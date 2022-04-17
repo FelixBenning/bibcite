@@ -1,13 +1,16 @@
-abstract class Citation extends HTMLSpanElement {
+abstract class Citation extends HTMLElement {
+  constructor(){
+    super();
+  }
 
   static get observedAttributes() {
-    return ["keys"];
+    return ["key"];
   }
-  set keys(values) {
-    this.setAttribute("keys", values.join(','));
+  set key(value) {
+    this.setAttribute("key", value);
   }
-  get keys() {
-    return this.getAttribute("keys").split(",").map((k) => k.trim());
+  get key() {
+    return this.getAttribute("key");
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

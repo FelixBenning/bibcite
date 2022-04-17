@@ -3,5 +3,5 @@
     "allowJs": false,
     "target":"ES6",
     "moduleResolution": "node"
-  }
+  },
 }
