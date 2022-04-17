@@ -1,4 +1,4 @@
-import Cite from 'citation-js';
+import Cite from '@citation-js/core';
 
 export class Bibliography extends HTMLElement {
 	constructor(){

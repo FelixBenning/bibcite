@@ -14,7 +14,7 @@ const config = defineConfig({
   plugins: [
     commonjs({
       include: "node_modules/**",
-      dynamicRequireTargets: ["node_modules/citation-js"],
+      // dynamicRequireTargets: ["node_modules/citation-js"],
     }),
     typescript(),
     nodeResolve(),
