@@ -1,5 +1,16 @@
 import Cite from '@citation-js/core';
 
+Cite(`
+@book{mas-colellMicroeconomicTheory1995,
+  title = {Microeconomic Theory},
+  author = {{Mas-Colell}, Andreu and Whinston, Michael Dennis and Green, Jerry R.},
+  year = {1995},
+  volume = {1},
+  publisher = {{Oxford university press New York}},
+  file = {C\:\\Users\\felix\\paper\\1995_Mas-Colell et al\\Mas-Colell et al_1995_Microeconomic theory.pdf}
+}
+`)
+
 export class Bibliography extends HTMLElement {
 	constructor(){
 		super();

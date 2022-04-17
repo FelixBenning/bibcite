@@ -17,7 +17,7 @@ const config = defineConfig({
       // dynamicRequireTargets: ["node_modules/citation-js"],
     }),
     typescript(),
-    nodeResolve(),
+    nodeResolve({browser: true}),
     nodePolyfills(),
     json(),
   ],
