@@ -1,6 +1,6 @@
-import Cite from '@citation-js/core';
+import { parse } from 'astrocite-bibtex';
 
-Cite(`
+console.log(parse(`
 @book{mas-colellMicroeconomicTheory1995,
   title = {Microeconomic Theory},
   author = {{Mas-Colell}, Andreu and Whinston, Michael Dennis and Green, Jerry R.},
@@ -9,7 +9,7 @@ Cite(`
   publisher = {{Oxford university press New York}},
   file = {C\:\\Users\\felix\\paper\\1995_Mas-Colell et al\\Mas-Colell et al_1995_Microeconomic theory.pdf}
 }
-`)
+`))
 
 export class Bibliography extends HTMLElement {
 	constructor(){
@@ -37,7 +37,7 @@ export class Bibliography extends HTMLElement {
 	}
 
 	set bib(value) {
-		this.bib = Cite(value)
+		this.bib = parse(value)
 	}
 	update_bib(oldValue, newValue) {
 	
