@@ -14,6 +14,7 @@ abstract class Citation extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    console.log("attribute changed cite key")
     // const eventName = oldValue ? "onCiteKeyChanged" : "onCiteKeyCreated";
     const keys = newValue.split(",").map((k) => k.trim());
     this.innerHTML = "";
@@ -26,6 +27,15 @@ abstract class Citation extends HTMLElement {
     // document.dispatchEvent(event);
   }
 }
+
+
+const event_test = new CustomEvent('testEvent', {'detail': "test event detail"})
+document.dispatchEvent(event_test)
+
+function testEventHandler(event){
+  console.log(event.detail)
+}
+document.addEventListener('testEvent', testEventHandler)
 
 export class RawCitation extends Citation {}
 

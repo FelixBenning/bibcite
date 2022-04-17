@@ -9,7 +9,7 @@ const config = defineConfig({
   input: "bibcite/index.ts",
   output: {
     file: "dist/bibcite.js",
-    format: "umd",
+    format: "cjs",
   },
   plugins: [
     commonjs({

@@ -1,48 +1,67 @@
-import { parse } from 'astrocite-bibtex';
+import { parse } from "astrocite-bibtex";
+import { Data } from "csl-json";
 
-console.log(parse(`
-@book{mas-colellMicroeconomicTheory1995,
-  title = {Microeconomic Theory},
-  author = {{Mas-Colell}, Andreu and Whinston, Michael Dennis and Green, Jerry R.},
-  year = {1995},
-  volume = {1},
-  publisher = {{Oxford university press New York}},
-  file = {C\:\\Users\\felix\\paper\\1995_Mas-Colell et al\\Mas-Colell et al_1995_Microeconomic theory.pdf}
+function dict_parse(citation_string) {
+  return Object.fromEntries(
+    parse(citation_string).map((citation) => [citation.id, citation])
+  );
 }
-`))
-
 export class Bibliography extends HTMLElement {
-	constructor(){
-		super();
-	}
+  _bib: Promise<{ [k: string]: Data }> = new Promise((_, reject) => {
+    reject("No bib yet!");
+  });
 
-	connectedCallback() {
-		console.log('connected Callback of Bib called')
-	}
+  constructor() {
+    super();
+  }
 
-	disconnectedCallback(){
-		console.log('disconnected Callback of bib called')
-	}
+  connectedCallback() {
+    console.log("connected Callback of Bib called");
+  }
 
-	static get observedAttributes() {
-		return ['bib'];
-  	}
+  disconnectedCallback() {
+    console.log("disconnected Callback of bib called");
+  }
 
-	attributeChangedCallback(name, oldValue, newValue){
-		console.log('bib attributeChangedCallback')
-		const dispatch_dict = {
-			'bib': this.update_bib,
-		}
-		dispatch_dict[name](oldValue, newValue);
-	}
+  static get observedAttributes() {
+    return ["bib"];
+  }
 
-	set bib(value) {
-		this.bib = parse(value)
-	}
-	update_bib(oldValue, newValue) {
-	
-	}
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log("bib attributeChangedCallback");
+    const dispatch_dict = {
+      bib: (_, new_val) => this.update_bib(new_val),
+    };
+    dispatch_dict[name](oldValue, newValue);
+  }
 
+  set bib(value: Promise<{ [k: string]: Data }>) {
+    this._bib = value;
+  }
+
+  get bib() {
+    return this._bib;
+  }
+
+  async provide_reference(key) {
+    return (await this._bib)[key];
+  }
+
+  update_bib(bib_url) {
+    if (bib_url) {
+      // bib file
+      this._bib = fetch(bib_url)
+        .then((resp) => resp.text())
+        .then(dict_parse)
+        .then((r) => {
+          console.log(r);
+          return r;
+        });
+    } else {
+      // inner HTML instead of bib file
+      this.bib = new Promise((resolve, _) => {
+        resolve(dict_parse(this.innerHTML));
+      });
+    }
+  }
 }
-
-
