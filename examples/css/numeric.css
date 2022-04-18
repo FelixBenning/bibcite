@@ -1,0 +1,9 @@
+bib-cite:first-of-type::before, bib-cite:only-child::before {
+	content: "[";
+}
+bib-cite:last-of-type::after, bib-cite:only-child::after {
+	content: "]";
+}
+bib-cite:not(:last-of-type):not(:only-child)::after {
+	content: ","
+}

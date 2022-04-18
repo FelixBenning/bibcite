@@ -1,4 +1,4 @@
-export abstract class Citation extends HTMLElement {
+export class Citation extends HTMLElement {
   _index;
 
   constructor(){
@@ -7,6 +7,7 @@ export abstract class Citation extends HTMLElement {
   
   set index(value){
     this._index = value;
+    this.innerHTML = value+1;
   }
   get index(){
     return this._index;
@@ -36,17 +37,3 @@ export abstract class Citation extends HTMLElement {
   }
 }
 
-
-const event_test = new CustomEvent('testEvent', {'detail': "test event detail"})
-document.dispatchEvent(event_test)
-
-function testEventHandler(event){
-  console.log(event.detail)
-}
-document.addEventListener('testEvent', testEventHandler)
-
-export class RawCitation extends Citation {}
-
-export class ParenCitation extends Citation {}
-
-export class TextCitation extends Citation {}

@@ -1,9 +1,7 @@
 import {Bibliography} from './bibliography';
-import { RawCitation, ParenCitation, TextCitation } from './citation';
+import { Citation } from './citation';
 
 customElements.define('bib-config', Bibliography);
 
+customElements.define('bib-cite', Citation);
 
-customElements.define('raw-cite', RawCitation, { extends: 'cite'});
-customElements.define('paren-cite', ParenCitation, { extends: 'cite'});
-customElements.define('text-cite', TextCitation, { extends: 'cite'});

@@ -1,10 +1,24 @@
 import { parse } from "astrocite-bibtex";
-import { Data } from "csl-json";
+import { Data, Person } from "csl-json";
 import { Citation } from "./citation";
+
+function authorsAlphabeticalComparison(
+  authors_1: Person[],
+  authors_2: Person[]
+) {
+  let cmp = authors_1[0].family.localeCompare(authors_2[0].family);
+  // TODO: imporve sorting
+  // if (cmp !=0 ) {
+  return cmp;
+  // }
+  // cmp = authors_1[0].given.localeCompare(authors_2[0].given)
+}
 
 function dict_parse(citation_string) {
   return Object.fromEntries(
-    parse(citation_string).map((citation) => [citation.id, citation])
+    parse(citation_string)
+      .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
+      .map((citation) => [citation.id, citation])
   );
 }
 export class Bibliography extends HTMLElement {
@@ -20,12 +34,29 @@ export class Bibliography extends HTMLElement {
     super();
   }
 
+  sorting = {
+    use: function () {
+      console.log("Sort by use");
+    },
+    alphabet: function () {},
+  };
+
+  citation_style = {
+    numeric: function () {
+      const css = document.createElement("link");
+      css.href= "/css/numeric.css";
+      css.type= "text/css";
+      css.rel= "stylesheet";
+      document.head.appendChild(css);
+    }
+  }
+
   listeners = {
     CitationAdded(event: CustomEvent) {
       this.registerCitation(event.detail.element);
     },
     CitationRemoved(event: CustomEvent) {
-      this.unregisterCitation(event.detail.element);
+      this.unregisterCitation(event.detail.element.index);
     },
   };
 
@@ -37,7 +68,6 @@ export class Bibliography extends HTMLElement {
   }
 
   registerCitation(citationElement) {
-    debugger;
     if (
       this._citations.length == 0 ||
       this._citations.at(-1).compareDocumentPosition(citationElement) ==
@@ -49,6 +79,7 @@ export class Bibliography extends HTMLElement {
       console.log(`registered ${citationElement.key}`);
     } else {
       // insertion
+      /*TODO*/
       console.log("random insertion not implemented yet");
     }
     // get might return undefined, the comparison is false, if is true
@@ -60,7 +91,9 @@ export class Bibliography extends HTMLElement {
     }
   }
 
-  unregisterCitation(idx) {}
+  unregisterCitation(index) {
+    /* TODO */
+  }
 
   disconnectedCallback() {
     console.log("disconnected Callback of bib called");
@@ -74,6 +107,8 @@ export class Bibliography extends HTMLElement {
     console.log(`attributeChangedCallback(${name}, ${oldValue}, ${newValue})`);
     const dispatch_dict = {
       bib: (_, new_val) => this.update_bib(new_val),
+      sorting: (_, new_val) => this.sorting[new_val](),
+      "citation-style": (_, new_val) => this.citation_style[new_val](),
     };
     dispatch_dict[name](oldValue, newValue);
   }
