@@ -1,6 +1,8 @@
-import Cite from '@citation-js/core';
+import { Cite } from 'citation-js';
 
-Cite(`
+const bib = new Cite();
+bib.add(
+`
 @book{mas-colellMicroeconomicTheory1995,
   title = {Microeconomic Theory},
   author = {{Mas-Colell}, Andreu and Whinston, Michael Dennis and Green, Jerry R.},
@@ -9,7 +11,10 @@ Cite(`
   publisher = {{Oxford university press New York}},
   file = {C\:\\Users\\felix\\paper\\1995_Mas-Colell et al\\Mas-Colell et al_1995_Microeconomic theory.pdf}
 }
-`)
+`
+)
+console.log(bib.format('bibliography', {format: 'html', template: 'apa', lang: 'en-US'}))
+
 
 export class Bibliography extends HTMLElement {
 	constructor(){

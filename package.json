@@ -40,6 +40,8 @@
   },
   "homepage": "https://github.com/FelixBenning/bibcite#readme",
   "dependencies": {
-    "@citation-js/core": "^0.5.7"
+    "@citation-js/core": "^0.5.7",
+    "@citation-js/plugin-bibtex": "^0.5.7",
+    "citation-js": "^0.5.7"
   }
 }

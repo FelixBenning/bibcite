@@ -12,12 +12,12 @@ const config = defineConfig({
     format: "umd",
   },
   plugins: [
+    nodeResolve({browser: true}),
     commonjs({
       include: "node_modules/**",
       // dynamicRequireTargets: ["node_modules/citation-js"],
     }),
     typescript(),
-    nodeResolve({browser: true}),
     nodePolyfills(),
     json(),
   ],
