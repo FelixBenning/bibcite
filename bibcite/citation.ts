@@ -1,11 +1,17 @@
-abstract class Citation extends HTMLElement {
+export abstract class Citation extends HTMLElement {
+  _index;
+
   constructor(){
     super();
   }
-
-  static get observedAttributes() {
-    return ["key"];
+  
+  set index(value){
+    this._index = value;
   }
+  get index(){
+    return this._index;
+  }
+
   set key(value) {
     this.setAttribute("key", value);
   }
@@ -13,18 +19,20 @@ abstract class Citation extends HTMLElement {
     return this.getAttribute("key");
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log("attribute changed cite key")
-    // const eventName = oldValue ? "onCiteKeyChanged" : "onCiteKeyCreated";
-    const keys = newValue.split(",").map((k) => k.trim());
-    this.innerHTML = "";
-    for (const key of keys) {
-      this.innerHTML += `<a href='#${key}><li>${/*TODO*/ key}</li></a>`;
-    }
+  static get observedAttributes() {
+    return ["key"];
+  }
 
-    // const options = { detail: [this, keys], bubbles: true };
-    // const event = new CustomEvent(eventName, options);
-    // document.dispatchEvent(event);
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(`Citation.attributeChangedCallback(${name}, ${oldValue}, ${newValue})`);
+    if (oldValue) {
+      const event = new CustomEvent("CitationRemoved", {detail: {"element": this}});
+      document.dispatchEvent(event);
+    }
+    if (newValue) {
+      const event = new CustomEvent("CitationAdded", {detail: {"element": this}, bubbles: true});
+      document.dispatchEvent(event);
+    }
   }
 }
 
