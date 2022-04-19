@@ -16,7 +16,7 @@ export class BibController extends HTMLElement {
 
       // so that the Citation can fire CitationRemoved on me even when disconnected
       event.detail.element.myController = this; 
-      event.stopImmediatePropagation(); // you shall not have other Controllers before me 
+      event.stopImmediatePropagation(); // monotheism 
 
       bib.registerCitation(event.detail.element);
     },
