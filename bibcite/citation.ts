@@ -48,7 +48,7 @@ export class Citation extends HTMLElement {
   }
   triggerCitationRemoved() {
     const event = new CustomEvent("CitationRemoved", {
-      bubbles: true,
+      bubbles: false, // dispatched on myController
       detail: { element: this },
     });
     // can not be dispatched on this as we might be disconnected so bubbling won't work
