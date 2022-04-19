@@ -40,7 +40,6 @@
   },
   "homepage": "https://github.com/FelixBenning/bibcite#readme",
   "dependencies": {
-    "astrocite-bibtex": "^0.16.4",
     "csl-json": "^0.1.0"
   }
 }

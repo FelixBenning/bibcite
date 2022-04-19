@@ -1,4 +1,3 @@
-import { parse } from "astrocite-bibtex";
 import { Data, Person } from "csl-json";
 import { Citation } from "./citation";
 
@@ -14,13 +13,6 @@ function authorsAlphabeticalComparison(
   // cmp = authors_1[0].given.localeCompare(authors_2[0].given)
 }
 
-function dict_parse(citation_string) {
-  return Object.fromEntries(
-    parse(citation_string)
-      .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
-      .map((citation) => [citation.id, citation])
-  );
-}
 export class Bibliography extends HTMLElement {
   _bib: Promise<{ [k: string]: Data }> = new Promise((_, reject) => {
     reject("No bib yet!");
@@ -44,12 +36,12 @@ export class Bibliography extends HTMLElement {
   citation_style = {
     numeric: function () {
       const css = document.createElement("link");
-      css.href= "/css/numeric.css";
-      css.type= "text/css";
-      css.rel= "stylesheet";
+      css.href = "/css/numeric.css";
+      css.type = "text/css";
+      css.rel = "stylesheet";
       document.head.appendChild(css);
-    }
-  }
+    },
+  };
 
   listeners = {
     CitationAdded(event: CustomEvent) {
@@ -106,7 +98,10 @@ export class Bibliography extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(`attributeChangedCallback(${name}, ${oldValue}, ${newValue})`);
     const dispatch_dict = {
-      bib: (_, new_val) => this.update_bib(new_val),
+      bib: (_, new_val) => {
+        this._bib = CSL_from_bib(new_val);
+        console.log('Parsed CSL:', this._bib);
+      },
       sorting: (_, new_val) => this.sorting[new_val](),
       "citation-style": (_, new_val) => this.citation_style[new_val](),
     };
@@ -124,18 +119,22 @@ export class Bibliography extends HTMLElement {
   async provide_reference(key) {
     return (await this._bib)[key];
   }
+}
 
-  update_bib(bib_url) {
-    if (bib_url) {
-      // bib file
-      this._bib = fetch(bib_url)
-        .then((resp) => resp.text())
-        .then(dict_parse);
-    } else {
-      // inner HTML instead of bib file
-      this.bib = new Promise((resolve, _) => {
-        resolve(dict_parse(this.innerHTML));
-      });
-    }
+async function CSL_from_bib(bib): Promise<{[k:string]: Data}> {
+  let csl_list: Data[];
+  if (typeof bib === "function") {
+    csl_list = await bib();
+  } else if (bib) {
+    // seems to be an url
+    csl_list = await fetch(bib).then((resp) => resp.json());
+  } else {
+    // empty bib_field
+    csl_list = JSON.parse(this.innerHTML);
   }
+  return Object.fromEntries(
+    csl_list
+      .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
+      .map((citation) => [citation.id, citation])
+  );
 }
