@@ -1,4 +1,4 @@
-import { Cite } from 'citation-js';
+import Cite from 'citation-js';
 
 const bib = new Cite();
 bib.add(
