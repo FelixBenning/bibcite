@@ -1,40 +1,42 @@
-import { Data, Person } from "csl-json";
+import { Data } from "csl-json";
 import { Citation } from "./citation";
+import { sortingFunctions } from "./sorting";
 
-function authorsAlphabeticalComparison(
-  authors_1: Person[],
-  authors_2: Person[]
-) {
-  let cmp = authors_1[0].family.localeCompare(authors_2[0].family);
-  // TODO: imporve sorting
-  // if (cmp !=0 ) {
-  return cmp;
-  // }
-  // cmp = authors_1[0].given.localeCompare(authors_2[0].given)
-}
 
 export class Bibliography {
-  _bib: { [k: string]: Data };
+  _bib: { [k: string]: Data }; // hashed and sorted CSL-json data
   _citations: Citation[] = []; // list of citations
+  _sorting=sortingFunctions["nameYearTitle"];
 
   // key pointing to idx of first citation using it
   _key_use: Map<string, number[]> = new Map();
 
   constructor(csl_json: Data[]) {
-    this._bib = Object.fromEntries(
-      csl_json
-        .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
-        .map((citation) => [citation.id, citation])
-    );
+    this._bib = this.sort_and_hash(csl_json, this._sorting);
     console.log("Parsed CSL:", this._bib);
   }
 
-  sorting = {
-    use: function () {
-      console.log("Sort by use");
-    },
-    alphabet: function () {},
-  };
+  sort_and_hash(csl_json: Data[], comparison){
+    return Object.fromEntries(
+      csl_json
+      // sort function should be argument of this function and be better
+        .sort((a, b) => comparison(a, b))
+        .map((citation) => [citation.id, citation])
+    );
+  }
+
+  set sorting(value) {
+    if (typeof value === 'string') {
+      this._sorting = sortingFunctions[value];
+    } else {
+      this._sorting = value;
+    }
+    this._bib = this.sort_and_hash(this.bib, this._sorting);
+  }
+  get sorting() {
+    return this._sorting;
+  }
+
 
   citation_style = {
     numeric: function () {
@@ -74,12 +76,12 @@ export class Bibliography {
     /* TODO */
   }
 
-  set bib(value) {
-    this._bib = value;
+  set bib(value:Data[]) {
+    this._bib = this.sort_and_hash(value, this._sorting);
   }
 
   get bib() {
-    return this._bib;
+    return Object.values(this._bib);
   }
 
   provide_reference(key) {
