@@ -13,6 +13,10 @@ export class BibController extends HTMLElement {
     async CitationAdded(event: CustomEvent) {
       const bib = await this.bibliography;
       console.log("caught CitationAdded event");
+
+      // so that the Citation can fire CitationRemoved on me even when disconnected
+      event.detail.element.myController = this; 
+
       bib.registerCitation(event.detail.element);
     },
     async CitationRemoved(event: CustomEvent) {
