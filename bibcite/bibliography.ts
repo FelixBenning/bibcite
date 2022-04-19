@@ -18,7 +18,7 @@ export class Bibliography {
   _citations: Citation[] = []; // list of citations
 
   // key pointing to idx of first citation using it
-  _first_key_use: Map<string, number> = new Map();
+  _key_use: Map<string, number[]> = new Map();
 
   constructor(csl_json: Data[]) {
     this._bib = Object.fromEntries(
@@ -64,9 +64,9 @@ export class Bibliography {
     // get might return undefined, the comparison is false, if is true
     // (in that case this is the first citation using it, it should be registered)
     if (
-      !(this._first_key_use.get(citationElement.key) >= citationElement.index)
+      !(this._key_use.get(citationElement.key) >= citationElement.index)
     ) {
-      this._first_key_use[citationElement.key] = citationElement.index;
+      this._key_use[citationElement.key] = citationElement.index;
     }
   }
 

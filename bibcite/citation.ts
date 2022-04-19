@@ -1,8 +1,8 @@
 import { BibController } from "./bibController";
 
 export class Citation extends HTMLElement {
-  _index;
   _myController: BibController;
+  _index:number; // id provided by Bibliography (DOM position relative to other Citations)
   _connected: boolean;
 
   constructor() {
@@ -15,7 +15,8 @@ export class Citation extends HTMLElement {
 
   set index(value) {
     this._index = value;
-    this.innerHTML = value + 1;
+    this.setAttribute('id', `cite_${value}`);
+    this.innerHTML = `${value + 1}`;// TODO remove
   }
   get index() {
     return this._index;
@@ -53,6 +54,8 @@ export class Citation extends HTMLElement {
     });
     // can not be dispatched on this as we might be disconnected so bubbling won't work
     this._myController.dispatchEvent(event);
+    this._index = undefined;
+    this.removeAttribute('id');
   }
 
   static get observedAttributes() {
