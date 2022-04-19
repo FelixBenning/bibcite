@@ -14,21 +14,19 @@ function authorsAlphabeticalComparison(
 }
 
 export class Bibliography {
-  _bib: {[k: string]: Data };
+  _bib: { [k: string]: Data };
   _citations: Citation[] = []; // list of citations
 
   // key pointing to idx of first citation using it
   _first_key_use: Map<string, number> = new Map();
 
-  constructor(bib: Data[]) {
+  constructor(csl_json: Data[]) {
     this._bib = Object.fromEntries(
-      bib.sort((a, b) => authorsAlphabeticalComparison(a.author, b.author)).map((citation) => [citation.id, citation])
+      csl_json
+        .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
+        .map((citation) => [citation.id, citation])
     );
-    console.log('Parsed CSL:', this._bib);
-  }
-  
-  static from_url(url) {
-    
+    console.log("Parsed CSL:", this._bib);
   }
 
   sorting = {
@@ -85,6 +83,6 @@ export class Bibliography {
   }
 
   provide_reference(key) {
-    return (this._bib)[key];
+    return this._bib[key];
   }
 }
