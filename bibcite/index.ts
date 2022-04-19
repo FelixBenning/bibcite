@@ -1,7 +1,7 @@
-import {Bibliography} from './bibliography';
+import { BibController } from './bibController';
 import { Citation } from './citation';
 
-customElements.define('bib-config', Bibliography);
+customElements.define('bib-config', BibController);
 
 customElements.define('bib-cite', Citation);
 

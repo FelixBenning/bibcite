@@ -13,17 +13,22 @@ function authorsAlphabeticalComparison(
   // cmp = authors_1[0].given.localeCompare(authors_2[0].given)
 }
 
-export class Bibliography extends HTMLElement {
-  _bib: Promise<{ [k: string]: Data }> = new Promise((_, reject) => {
-    reject("No bib yet!");
-  });
+export class Bibliography {
+  _bib: {[k: string]: Data };
   _citations: Citation[] = []; // list of citations
 
   // key pointing to idx of first citation using it
   _first_key_use: Map<string, number> = new Map();
 
-  constructor() {
-    super();
+  constructor(bib: Data[]) {
+    this._bib = Object.fromEntries(
+      bib.sort((a, b) => authorsAlphabeticalComparison(a.author, b.author)).map((citation) => [citation.id, citation])
+    );
+    console.log('Parsed CSL:', this._bib);
+  }
+  
+  static from_url(url) {
+    
   }
 
   sorting = {
@@ -42,22 +47,6 @@ export class Bibliography extends HTMLElement {
       document.head.appendChild(css);
     },
   };
-
-  listeners = {
-    CitationAdded(event: CustomEvent) {
-      this.registerCitation(event.detail.element);
-    },
-    CitationRemoved(event: CustomEvent) {
-      this.unregisterCitation(event.detail.element.index);
-    },
-  };
-
-  connectedCallback() {
-    for (const [functionName, callback] of Object.entries(this.listeners)) {
-      console.log(`addEventListener: ${functionName}`);
-      document.addEventListener(functionName, callback.bind(this));
-    }
-  }
 
   registerCitation(citationElement) {
     if (
@@ -87,28 +76,7 @@ export class Bibliography extends HTMLElement {
     /* TODO */
   }
 
-  disconnectedCallback() {
-    console.log("disconnected Callback of bib called");
-  }
-
-  static get observedAttributes() {
-    return ["bib", "sorting", "citation-style"];
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`attributeChangedCallback(${name}, ${oldValue}, ${newValue})`);
-    const dispatch_dict = {
-      bib: (_, new_val) => {
-        this._bib = CSL_from_bib(new_val);
-        console.log('Parsed CSL:', this._bib);
-      },
-      sorting: (_, new_val) => this.sorting[new_val](),
-      "citation-style": (_, new_val) => this.citation_style[new_val](),
-    };
-    dispatch_dict[name](oldValue, newValue);
-  }
-
-  set bib(value: Promise<{ [k: string]: Data }>) {
+  set bib(value) {
     this._bib = value;
   }
 
@@ -116,25 +84,7 @@ export class Bibliography extends HTMLElement {
     return this._bib;
   }
 
-  async provide_reference(key) {
-    return (await this._bib)[key];
+  provide_reference(key) {
+    return (this._bib)[key];
   }
-}
-
-async function CSL_from_bib(bib): Promise<{[k:string]: Data}> {
-  let csl_list: Data[];
-  if (typeof bib === "function") {
-    csl_list = await bib();
-  } else if (bib) {
-    // seems to be an url
-    csl_list = await fetch(bib).then((resp) => resp.json());
-  } else {
-    // empty bib_field
-    csl_list = JSON.parse(this.innerHTML);
-  }
-  return Object.fromEntries(
-    csl_list
-      .sort((a, b) => authorsAlphabeticalComparison(a.author, b.author))
-      .map((citation) => [citation.id, citation])
-  );
 }
