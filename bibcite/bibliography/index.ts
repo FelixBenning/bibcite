@@ -1,6 +1,8 @@
+// AVOID DOM RELATED STUFF HERE! -> allow use in build-time mechanism
+
 import { Data } from "csl-json";
-import { Citation } from "./citation";
-import { References } from "./references";
+import { Citation } from "../citation";
+import { References } from "../references";
 import { sortingFunctions } from "./sorting";
 
 
@@ -9,6 +11,7 @@ export class Bibliography {
   _citations: Citation[] = []; // list of citations
   _reference_lists: References[] = []; // list of reference-lists
   _sorting=sortingFunctions["nameYearTitle"];
+  _citationStyle="numeric";
 
   // key pointing to idx of first citation using it
   _key_use: Map<string, number[]> = new Map();
@@ -38,17 +41,6 @@ export class Bibliography {
   get sorting() {
     return this._sorting;
   }
-
-
-  citation_style = {
-    numeric: function () {
-      const css = document.createElement("link");
-      css.href = "/css/numeric.css";
-      css.type = "text/css";
-      css.rel = "stylesheet";
-      document.head.appendChild(css);
-    },
-  };
 
   registerCitation(citationElement) {
     if (
