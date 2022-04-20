@@ -69,7 +69,8 @@ export class BibController extends HTMLElement {
 
   set innerHTML(value: string) {
     console.log("[BibController] set innerHTML");
-    this.make_bib(); // TODO: should be update (ignores value at the moment)
+    super.innerHTML = value;
+    this.make_bib();
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
