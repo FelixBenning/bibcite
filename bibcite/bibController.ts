@@ -23,7 +23,7 @@ export class BibController extends HTMLElement {
     async CitationRemoved(event: CustomEvent) {
       console.log("[BibController] caught CitationRemoved event");
       const bib = await this.bibliography;
-      bib.unregisterCitation(event.detail.element.index);
+      bib.unregisterCitation(event.detail.element);
     },
     async ReferenceAdded(event: CustomEvent) {
       console.log("[BibController] caught ReferenceAdded event");
