@@ -6,12 +6,20 @@ import { References } from "../references";
 import { sortingFunctions } from "./sorting";
 import { CitationList } from "../CitationList";
 
+function docPosComparison(a: HTMLElement, b: HTMLElement) {
+  return a.compareDocumentPosition(b) == Node.DOCUMENT_POSITION_FOLLOWING
+    ? -1
+    : 1;
+}
+
 export class Bibliography {
   _bib: { [k: string]: Data }; // hashed and sorted CSL-json data
   _citations: CitationList<Citation> = new CitationList<Citation>(); // list of citations
   _reference_lists: References[] = []; // list of reference-lists
   _sorting = sortingFunctions["nameYearTitle"];
   _citationStyle = "numeric";
+  _used_keys: Map<string, Citation[]> = new Map<string, Citation[]>();
+  _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
   // // key pointing to idx of first citation using it
   // _key_use: Map<string, number[]> = new Map();
@@ -42,15 +50,37 @@ export class Bibliography {
     return this._sorting;
   }
 
-  registerCitation(citationElement: Citation) {
-    this._citations.push(citationElement);
+  sort_used_keys() {
+    this._used_keys.forEach((ci) => ci.sort(docPosComparison)); // sort lists of citations
+    const sorted = [...this._used_keys].sort((a, b) =>
+      docPosComparison((<Citation[]>a.at(1)).at(0), (<Citation[]>b.at(1)).at(0))
+    );
 
-    citationElement.citationStyle = this._citationStyle;
-    citationElement.info = {
-      identifier: citationElement.index.toString(),
-      bibInfo: this._bib[citationElement.key],
+    // make references new
+    // tell citations new identifier
+
+    return new Map<string, Citation[]>(sorted);
+  }
+
+  registerCitation(ci: Citation) {
+    if (this._used_keys.has(ci.key)) {
+      this._used_keys.get(ci.key).push(ci);
+    } else if (this._safe_to_append_key(ci)) {
+      this._used_keys.set(ci.key, [ci]);
+      this._safe_to_append_key = (other) => docPosComparison(ci, other) < 0;
+    } else {
+      this._used_keys.set(ci.key, [ci]);
+      this.sort_used_keys();
+    }
+
+    this._citations.push(ci);
+
+    ci.citationStyle = this._citationStyle;
+    ci.info = {
+      identifier: ci.index.toString(),
+      bibInfo: this._bib[ci.key],
     };
-    console.log(`[Bibliography] Registered ${citationElement.key}`);
+    console.log(`[Bibliography] Registered ${ci.key}`);
   }
 
   unregisterCitation(citationElement: Citation) {
