@@ -64,7 +64,7 @@ export class Citation extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(
-      `Citation.attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
+      `[Citation] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
     );
     if (name == "key") {
       // if an old value exists we need to unregister from the bibliography

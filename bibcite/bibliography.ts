@@ -1,11 +1,13 @@
 import { Data } from "csl-json";
 import { Citation } from "./citation";
+import { References } from "./references";
 import { sortingFunctions } from "./sorting";
 
 
 export class Bibliography {
   _bib: { [k: string]: Data }; // hashed and sorted CSL-json data
   _citations: Citation[] = []; // list of citations
+  _reference_lists: References[] = []; // list of reference-lists
   _sorting=sortingFunctions["nameYearTitle"];
 
   // key pointing to idx of first citation using it
@@ -13,7 +15,7 @@ export class Bibliography {
 
   constructor(csl_json: Data[]) {
     this._bib = this.sort_and_hash(csl_json, this._sorting);
-    console.log("Parsed CSL:", this._bib);
+    console.log("[Bibliography] Sorted & Hashed CSL:", this._bib);
   }
 
   sort_and_hash(csl_json: Data[], comparison){
@@ -57,7 +59,6 @@ export class Bibliography {
       //append
       citationElement.index = this._citations.length; // previous length is index of new
       this._citations.push(citationElement);
-      console.log(`registered ${citationElement.key}`);
     } else {
       // insertion
       /*TODO*/
@@ -70,10 +71,20 @@ export class Bibliography {
     ) {
       this._key_use[citationElement.key] = citationElement.index;
     }
+    console.log(`[Bibliography] Registered ${citationElement.key}`);
   }
 
   unregisterCitation(index) {
     /* TODO */
+  }
+
+  registerReferenceList(referenceElement) {
+    this._reference_lists.push(referenceElement);
+    console.log('[Bibliography] Registered ReferenceList');
+  }
+  unregisterReferenceList(referenceElement) {
+    this._reference_lists = this._reference_lists.filter(l => l != referenceElement );
+    console.log('[Bibliography] Unregistered ReferenceList');
   }
 
   set bib(value:Data[]) {
