@@ -45,7 +45,11 @@ export class Bibliography {
   registerCitation(citationElement: Citation) {
     this._citations.push(citationElement);
 
-    citationElement.classList.add(this._citationStyle);
+    citationElement.citationStyle = this._citationStyle;
+    citationElement.info = {
+      identifier: citationElement.index.toString(),
+      bibInfo: this._bib[citationElement.key],
+    };
     console.log(`[Bibliography] Registered ${citationElement.key}`);
   }
 

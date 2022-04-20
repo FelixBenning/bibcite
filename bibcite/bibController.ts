@@ -93,7 +93,7 @@ export class BibController extends HTMLElement {
       return new Bibliography(await response.json());
     } else {
       console.log("|- bib attribute missing -> waiting for innerHTML");
-      const htmlLoaded = new Promise((resolve, reject) => {
+      const htmlLoaded = new Promise((resolve, _) => {
         document.addEventListener("DOMContentLoaded", () =>
           resolve(this.innerHTML)
         );

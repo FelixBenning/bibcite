@@ -33,7 +33,15 @@ function nameYearTitle(
   return citation_1.title.localeCompare(citation_2.title);
 }
 
+function insertion(
+  citation_1: Data,
+  citation_2: Data
+){
+  return 0; // all are equivalent -> do not sort
+}
+
 export const sortingFunctions = {
   nameYearTitle: nameYearTitle,
-  nyt: nameYearTitle
+  nyt: nameYearTitle,
+  insertion: insertion
 }
