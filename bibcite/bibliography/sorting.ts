@@ -22,10 +22,15 @@ function nameYearTitle(
   }
 
   /* YEAR */
-  const year_1 = citation_1["original-date"]["date-parts"];
-  const year_2 = citation_2["original-date"]["date-parts"];
-  // TODO: finish sorting
-  return cmp;
+  const year_1:number = <number><unknown> citation_1.issued["date-parts"][0];
+  const year_2:number = <number><unknown> citation_2.issued["date-parts"][0];
+  cmp = year_1-year_2;
+  if (cmp != 0) {
+    return cmp;
+  }
+
+  /* TITLE */
+  return citation_1.title.localeCompare(citation_2.title);
 }
 
 export const sortingFunctions = {
