@@ -42,7 +42,7 @@ export class Bibliography {
     return this._sorting;
   }
 
-  registerCitation(citationElement) {
+  registerCitation(citationElement:Citation) {
     if (
       this._citations.length == 0 ||
       this._citations.at(-1).compareDocumentPosition(citationElement) ==
@@ -50,6 +50,7 @@ export class Bibliography {
     ) {
       //append
       citationElement.index = this._citations.length; // previous length is index of new
+      citationElement.classList.add(this._citationStyle);
       this._citations.push(citationElement);
     } else {
       // insertion
@@ -58,11 +59,11 @@ export class Bibliography {
     }
     // get might return undefined, the comparison is false, if is true
     // (in that case this is the first citation using it, it should be registered)
-    if (
-      !(this._key_use.get(citationElement.key) >= citationElement.index)
-    ) {
-      this._key_use[citationElement.key] = citationElement.index;
-    }
+    // if (
+    //   !(this._key_use.get(citationElement.key) >= citationElement.index)
+    // ) {
+    //   this._key_use[citationElement.key] = citationElement.index;
+    // }
     console.log(`[Bibliography] Registered ${citationElement.key}`);
   }
 
