@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin typescript",
+    "build-prod": "rollup --config rollup.config.prod.ts --configPlugin typescript",
     "dev": "rollup --config rollup.config.dev.ts --configPlugin typescript --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +27,7 @@
     "rollup": "^2.70.2",
     "rollup-plugin-polyfill-node": "^0.9.0",
     "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.6.3"
   },
   "directories": {
