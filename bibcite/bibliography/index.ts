@@ -7,9 +7,14 @@ import { sortingFunctions } from "./sorting";
 import { CitationList } from "../CitationList";
 
 function docPosComparison(a: HTMLElement, b: HTMLElement) {
-  return a.compareDocumentPosition(b) == Node.DOCUMENT_POSITION_FOLLOWING
-    ? -1
-    : 1;
+  switch (a.compareDocumentPosition(b)) {
+    case Node.DOCUMENT_POSITION_FOLLOWING:
+      return -1;
+    case Node.DOCUMENT_POSITION_PRECEDING:
+      return 1;
+    default:
+      return 0;
+  }
 }
 
 export class Bibliography {
