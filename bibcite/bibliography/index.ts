@@ -12,7 +12,6 @@ export class Bibliography {
   _sorting = comparisons["nameYearTitle"];
   _citationStyle = "numeric";
   _used_keys: UsedKeys;
-  _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
   constructor(csl_json: Data[]) {
     this._bib = this.sort_and_hash(csl_json, this._sorting);
