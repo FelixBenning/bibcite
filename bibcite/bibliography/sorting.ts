@@ -40,7 +40,7 @@ function insertion(
   return 0; // all are equivalent -> do not sort
 }
 
-export const sortingFunctions = {
+export const comparisons = {
   nameYearTitle: nameYearTitle,
   nyt: nameYearTitle,
   insertion: insertion

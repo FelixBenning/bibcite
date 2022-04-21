@@ -1,6 +1,6 @@
 import { BibController } from "./bibController";
 
-export class References extends HTMLElement {
+export class BibReference extends HTMLElement {
   _myController: BibController;
   set myController(value:BibController){
     this._myController = value;

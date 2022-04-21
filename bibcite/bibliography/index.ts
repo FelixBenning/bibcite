@@ -2,31 +2,27 @@
 
 import { Data } from "csl-json";
 import { Citation } from "../citation";
-import { References } from "../references";
-import { sortingFunctions } from "./sorting";
-
-function docPosComp(a: HTMLElement, b: HTMLElement) {
-  switch (a.compareDocumentPosition(b)) {
-    case Node.DOCUMENT_POSITION_FOLLOWING:
-      return -1;
-    case Node.DOCUMENT_POSITION_PRECEDING:
-      return 1;
-    default:
-      return 0;
-  }
-}
+import { BibReference } from "../bibReference";
+import { comparisons } from "./sorting";
+import { UsedKeys, SortedUsedKeys } from "./key-use-tracker";
 
 export class Bibliography {
   _bib: { [k: string]: Data }; // hashed and sorted CSL-json data
-  _reference_lists: References[] = []; // list of reference-lists
-  _sorting = sortingFunctions["nameYearTitle"];
+  _reference_lists: BibReference[] = []; // list of <bib-reference> elements
+  _sorting = comparisons["nameYearTitle"];
   _citationStyle = "numeric";
-  _used_keys: Map<string, { pos_id: string; citations: Citation[] }> = new Map();
+  _used_keys: UsedKeys;
   _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
   constructor(csl_json: Data[]) {
     this._bib = this.sort_and_hash(csl_json, this._sorting);
     console.log("[Bibliography] Sorted & Hashed CSL:", this._bib);
+
+    if (this.sorting.name === "insertion") {
+      this._used_keys = new SortedUsedKeys(new Map());
+    } else {
+      this._used_keys = new UsedKeys(new Map());
+    }
   }
 
   sort_and_hash(csl_json: Data[], comparison) {
@@ -38,76 +34,38 @@ export class Bibliography {
     );
   }
 
-  set sorting(value) {
-    if (typeof value === "string") {
-      this._sorting = sortingFunctions[value];
-    } else {
-      this._sorting = value;
+  set sorting(value: string | ((c1: Data, c2: Data) => number)) {
+    const new_sorting: (c1: Data, c2: Data) => number =
+      typeof value === "string" ? comparisons[value] : value;
+
+    if (this.sorting === new_sorting) {
+      return;
+    } else if (new_sorting.name === "insertion") {
+      // we need to track insertion order
+      this._used_keys = new SortedUsedKeys(this._used_keys.get());
+    } else if (this.sorting.name == "insertion") {
+      // we can stop keeping track
+      this._used_keys = new UsedKeys(this._used_keys.get());
     }
-    this._bib = this.sort_and_hash(this.bib, this._sorting);
+    this._bib = this.sort_and_hash(this.bib, new_sorting);
+    this._sorting = new_sorting;
   }
-  get sorting() {
+  get sorting(): (c1: Data, c2: Data) => number {
     return this._sorting;
   }
 
-  sort_used_keys() {
-    // sort lists of citations for every key
-    this._used_keys.forEach((entry) => entry.citations.sort(docPosComp).at(0));
-    const sorted = [...this._used_keys].sort((a, b) =>
-      docPosComp(
-        // compare document position of first citation (i.e. .at(0))
-        (<{ pos_id: string; citations: Citation[] }>a.at(1)).citations.at(0),
-        (<{ pos_id: string; citations: Citation[] }>b.at(1)).citations.at(0)
-      )
-    );
-
-    sorted.forEach((value, idx) => (value[1].pos_id = String(idx)));
-    this._used_keys = new Map(sorted);
-
-    // tell citations new identifier
-    this._used_keys.forEach((entry) =>
-      entry.citations.forEach((c) => (c.identifier = entry.pos_id))
-    );
-
-    // renew references
-    for (const references of this._reference_lists){
-      references
-    }
-
-  }
-
   registerCitation(ci: Citation) {
-    if (this._used_keys.has(ci.key)) {
-      const entry = this._used_keys.get(ci.key);
-      entry.citations.push(ci); // add citations to entry
-      ci.identifier = entry.pos_id;
-    } else if (this._safe_to_append_key(ci)) {
-      const entry = {
-        pos_id: String(this.sort_used_keys.length),
-        citations: [ci],
-      };
-      this._used_keys.set(ci.key, entry);
-      this._safe_to_append_key = (other) => docPosComp(ci, other) < 0;
-    } else {
-      const entry = {
-        pos_id: String(this.sort_used_keys.length),
-        citations: [ci],
-      };
-      this._used_keys.set(ci.key, entry);
-      this.sort_used_keys();
+    if (this._used_keys.add(ci).need_ref_update) {
+      // update references
     }
-
     ci.citationStyle = this._citationStyle;
     ci.bibInfo = this._bib[ci.key];
     console.log(`[Bibliography] Registered ${ci.key}`);
   }
 
   unregisterCitation(ci: Citation) {
-    const ci_list = this._used_keys.get(ci.key).citations
-    const idx = ci_list.indexOf(ci);
-    ci_list.splice(idx, 1); // remove citation from list
-    if (idx == 0 /* this was the first occurance*/) {
-      this.sort_used_keys()
+    if (this._used_keys.remove(ci).need_ref_update) {
+      // update references
     }
   }
 
