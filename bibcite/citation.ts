@@ -5,12 +5,17 @@ export class Citation extends HTMLElement {
   _myController: BibController;
   _index:number; // id provided by Bibliography (DOM position relative to other Citations)
   _connected: boolean;
+  _identifier: string;
+  _bibInfo:Data;
   _info: {identifier:string, bibInfo:Data};
 
   constructor() {
     super();
   }
 
+  set identifier(value:string){
+    this._identifier = value;
+  }
   set myController(value: BibController) {
     this._myController = value;
   }
@@ -33,15 +38,15 @@ export class Citation extends HTMLElement {
     this.classList.add(value);
   }
 
-  set info(value:{identifier:string, bibInfo: Data}){
-    this._info = value;
+  set bibInfo(info:Data){
+    this._bibInfo = info;
     this.innerHTML = `
-      <span slot="identifier">${value.identifier}</span>
-      <span slot="author">${value.bibInfo.author.map(p => p.family).slice(0, /*TODO: how many authors*/1)}</span>
-      <span slot="year">${value.bibInfo.issued["date-parts"][0]}</span>
-      <span slot="title">${value.bibInfo.title}</span>
-      <span slot="publisher">${value.bibInfo.publisher}</span>
-      <span slot="doi">${value.bibInfo.DOI}</span>
+      <span slot="identifier">${this._identifier}</span>
+      <span slot="author">${info.author.map(p => p.family).slice(0, /*TODO: how many authors*/1)}</span>
+      <span slot="year">${info.issued["date-parts"][0]}</span>
+      <span slot="title">${info.title}</span>
+      <span slot="publisher">${info.publisher}</span>
+      <span slot="doi">${info.DOI}</span>
     ` 
     this.attachShadow({mode: "open"});
     this.shadowRoot.innerHTML = `
