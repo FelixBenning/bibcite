@@ -27,7 +27,7 @@ export class BibController extends HTMLElement {
     },
     async ReferenceAdded(event: CustomEvent) {
       console.log("[BibController] caught ReferenceAdded event");
-      const bib = await this.bibliography;
+      const bib:Bibliography = await this.bibliography;
 
       // so that ReferenceRemoved can fire on me even when disconnected
       event.detail.element.myController = this;

@@ -1,7 +1,9 @@
+import { Data } from "csl-json";
 import { BibController } from "./bibController";
 
 export class BibReference extends HTMLElement {
   _myController: BibController;
+
   set myController(value:BibController){
     this._myController = value;
   }
@@ -19,6 +21,10 @@ export class BibReference extends HTMLElement {
       detail: {element: this},
     });
     this._myController.dispatchEvent(event);
+  }
+
+  update(used_references: {identifier: string, csl_data: Data}[]){
+
   }
 
 }

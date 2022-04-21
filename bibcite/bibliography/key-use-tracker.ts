@@ -1,3 +1,4 @@
+import { stringify } from "querystring";
 import { Citation } from "../citation";
 
 function docPosComp(a: HTMLElement, b: HTMLElement) {
@@ -47,6 +48,9 @@ export class UsedKeys {
       return { index: idx, need_ref_update: false };
     }
   }
+  has(key:string) {
+    return this._used_keys.has(key);
+  }
 
   get() {
     return this._used_keys;
@@ -72,7 +76,7 @@ export class SortedUsedKeys extends UsedKeys {
       )
     );
 
-    sorted.forEach((value, idx) => (value[1].id = String(idx)));
+    sorted.forEach(([_, entry], idx) => (entry.id = String(idx)));
     this._length = sorted.length;
     if (this._length == 0) {
       this._safe_to_append_key = (_: Citation) => true;
@@ -110,9 +114,5 @@ export class SortedUsedKeys extends UsedKeys {
       this.sort_used_keys();
     }
     return { index: idx, need_ref_update: idx == 0 };
-  }
-
-  get() {
-    return this._used_keys;
   }
 }

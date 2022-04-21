@@ -7,11 +7,12 @@ import { comparisons } from "./sorting";
 import { UsedKeys, SortedUsedKeys } from "./key-use-tracker";
 
 export class Bibliography {
-  _bib: { [k: string]: Data }; // hashed and sorted CSL-json data
+  _bib: Map<string, Data>; // hashed and sorted CSL-json data
   _reference_lists: BibReference[] = []; // list of <bib-reference> elements
   _sorting = comparisons["nameYearTitle"];
   _citationStyle = "numeric";
   _used_keys: UsedKeys;
+  _identifier: (d: Data) => string = (csl_data) => "";
 
   constructor(csl_json: Data[]) {
     this._bib = this.sort_and_hash(csl_json, this._sorting);
@@ -25,7 +26,7 @@ export class Bibliography {
   }
 
   sort_and_hash(csl_json: Data[], comparison) {
-    return Object.fromEntries(
+    return new Map(
       csl_json
         // sort function should be argument of this function and be better
         .sort((a, b) => comparison(a, b))
@@ -55,7 +56,9 @@ export class Bibliography {
 
   registerCitation(ci: Citation) {
     if (this._used_keys.add(ci).need_ref_update) {
-      // update references
+      for (const bib_ref of this._reference_lists) {
+        bib_ref.update(this.used_references());
+      }
     }
     ci.citationStyle = this._citationStyle;
     ci.bibInfo = this._bib[ci.key];
@@ -64,7 +67,23 @@ export class Bibliography {
 
   unregisterCitation(ci: Citation) {
     if (this._used_keys.remove(ci).need_ref_update) {
-      // update references
+      for (const bib_ref of this._reference_lists) {
+        bib_ref.update(this.used_references());
+      }
+    }
+  }
+
+  used_references(): { identifier: string; csl_data: Data }[] {
+    if (this.sorting.name === "insertion") {
+      return Array.from(this._used_keys.get()).map(([key, entry]) => {
+        return { identifier: entry.id, csl_data: this._bib[key] };
+      });
+    } else {
+      return Array.from(this._bib)
+        .filter(([key, _]) => this._used_keys.has(key))
+        .map(([_, csl_data]) => {
+          return { identifier: this._identifier(csl_data), csl_data: csl_data };
+        });
     }
   }
 
@@ -84,10 +103,6 @@ export class Bibliography {
   }
 
   get bib() {
-    return Object.values(this._bib);
-  }
-
-  provide_reference(key) {
-    return this._bib[key];
+    return Array.from(this._bib.values());
   }
 }
