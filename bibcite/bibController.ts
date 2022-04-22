@@ -1,4 +1,5 @@
 import { Bibliography } from "./bibliography";
+import { comparisons } from "./bibliography/sorting";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope
@@ -13,10 +14,13 @@ export class BibController extends HTMLElement {
     async CitationAdded(event: CustomEvent) {
       console.log("[BibController] caught CitationAdded event");
       const bib = await this.bibliography;
+      const citation = event.detail.element;
 
       // so that the Citation can fire CitationRemoved on me even when disconnected
-      event.detail.element.myController = this;
+      citation.myController = this;
       event.stopImmediatePropagation(); // monotheism
+
+      citation.citationStyle = this.citation_style;
 
       bib.registerCitation(event.detail.element);
     },
@@ -73,6 +77,14 @@ export class BibController extends HTMLElement {
     this.make_bib();
   }
 
+  get citation_style(){
+    return this.getAttribute('citation-style');
+  }
+
+  get sorting(){
+    return comparisons[this.getAttribute('sorting') || "insertion"];
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(
       `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
@@ -90,7 +102,7 @@ export class BibController extends HTMLElement {
     if (bib) {
       console.log("|- bib attribute present -> fetching");
       const response = await fetch(bib);
-      return new Bibliography(await response.json());
+      return new Bibliography(await response.json(), this.sorting);
     } else {
       console.log("|- bib attribute missing -> waiting for innerHTML");
       const htmlLoaded = new Promise((resolve, _) => {
@@ -98,7 +110,7 @@ export class BibController extends HTMLElement {
           resolve(this.innerHTML)
         );
       });
-      return new Bibliography(await htmlLoaded.then(JSON.parse));
+      return new Bibliography(await htmlLoaded.then(JSON.parse), this.sorting);
     }
   }
 }

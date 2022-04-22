@@ -1,4 +1,3 @@
-import { stringify } from "querystring";
 import { Citation } from "../citation";
 
 function docPosComp(a: HTMLElement, b: HTMLElement) {
@@ -12,7 +11,7 @@ function docPosComp(a: HTMLElement, b: HTMLElement) {
   }
 }
 
-export class UsedKeys {
+export class CitationKeyUse {
   _used_keys: Map<string, { id: string; citations: Citation[] }>;
   _length: number = 0;
 
@@ -57,7 +56,15 @@ export class UsedKeys {
   }
 }
 
-export class SortedUsedKeys extends UsedKeys {
+export class BibSortedCitationKeyUse extends CitationKeyUse {
+  _key_order: Map<string, number>;
+  constructor(used_keys: Map<string, { id: string; citations: Citation[] }>, key_order: Map<string, number>) {
+    super(used_keys);
+    this._key_order = key_order;
+  }
+}
+
+export class InsertionSortedCitationKeyUse extends CitationKeyUse {
   _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
   constructor(used_keys: Map<string, { id: string; citations: Citation[] }>) {
