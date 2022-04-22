@@ -47,7 +47,7 @@ export class CitationKeyUse {
       return { index: idx, need_ref_update: false };
     }
   }
-  has(key:string) {
+  has(key: string) {
     return this._used_keys.has(key);
   }
 
@@ -58,9 +58,41 @@ export class CitationKeyUse {
 
 export class BibSortedCitationKeyUse extends CitationKeyUse {
   _key_order: Map<string, number>;
-  constructor(used_keys: Map<string, { id: string; citations: Citation[] }>, key_order: Map<string, number>) {
+  constructor(
+    used_keys: Map<string, { id: string; citations: Citation[] }>,
+    key_order: Map<string, number>
+  ) {
     super(used_keys);
     this._key_order = key_order;
+    this.sort_used_keys();
+  }
+
+  sort_used_keys() {
+    const sorted = [...this._used_keys].sort(
+      ([key1, _1], [key2, _2]) =>
+        this._key_order.get(key1) - this._key_order.get(key2)
+    );
+    sorted.forEach(([_, entry], idx) => {
+      entry.id = String(idx);
+      entry.citations.forEach((ci) => (ci.index = idx));
+    });
+    this._used_keys = new Map(sorted);
+  }
+
+  add(ci: Citation) {
+    const result = super.add(ci);
+    if (result.need_ref_update) {
+      this.sort_used_keys();
+    }
+    return result;
+  }
+
+  remove(ci: Citation) {
+    const result = super.remove(ci);
+    if (result.need_ref_update) {
+      this.sort_used_keys();
+    }
+    return result;
   }
 }
 
@@ -97,9 +129,6 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
     this._used_keys.forEach((entry) =>
       entry.citations.forEach((c) => (c.identifier = entry.id))
     );
-
-    // renew references
-    // TODO ??
   }
 
   add(ci: Citation) {
