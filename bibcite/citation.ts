@@ -3,29 +3,24 @@ import { BibController } from "./bibController";
 
 export class Citation extends HTMLElement {
   _myController: BibController;
-  _index:number; // id provided by Bibliography (DOM position relative to other Citations)
   _connected: boolean;
-  _identifier: string;
+  _bibIndex:number; // id provided by Bibliography (DOM position relative to other Citations)
   _bibInfo:Data;
-  _info: {identifier:string, bibInfo:Data};
 
   constructor() {
     super();
   }
 
-  set identifier(value:string){
-    this._identifier = value;
-  }
   set myController(value: BibController) {
     this._myController = value;
   }
 
-  set index(value) {
-    this._index = value;
+  set bibIndex(value) {
+    this._bibIndex = value;
     this.setAttribute('id', `cite_${value}`);
   }
-  get index() {
-    return this._index;
+  get bibIndex() {
+    return this._bibIndex;
   }
 
   set key(value) {
@@ -41,7 +36,6 @@ export class Citation extends HTMLElement {
   set bibInfo(info:Data){
     this._bibInfo = info;
     this.innerHTML = `
-      <span slot="identifier">${this._identifier}</span>
       <span slot="author">${info.author.map(p => p.family).slice(0, /*TODO: how many authors*/1)}</span>
       <span slot="year">${info.issued["date-parts"][0]}</span>
       <span slot="title">${info.title}</span>
@@ -83,7 +77,7 @@ export class Citation extends HTMLElement {
     });
     // can not be dispatched on this as we might be disconnected so bubbling won't work
     this._myController.dispatchEvent(event);
-    this._index = undefined;
+    this._bibIndex = undefined;
     this.removeAttribute('id');
   }
 

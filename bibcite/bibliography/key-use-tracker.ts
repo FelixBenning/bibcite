@@ -23,7 +23,7 @@ export class CitationKeyUse {
     if (this._used_keys.has(ci.key)) {
       const entry = this._used_keys.get(ci.key);
       entry.citations.push(ci); // add citations to entry
-      ci.index = entry.index;
+      ci.bibIndex = entry.index;
       return { need_ref_update: false };
     } else {
       this._length += 1;
@@ -74,7 +74,7 @@ export class BibSortedCitationKeyUse extends CitationKeyUse {
     );
     sorted.forEach(([_, entry], idx) => {
       entry.index = idx;
-      entry.citations.forEach((ci) => (ci.index = idx));
+      entry.citations.forEach((ci) => (ci.bibIndex = idx));
     });
     this._used_keys = new Map(sorted);
   }
@@ -127,7 +127,7 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
 
     // tell citations new index
     this._used_keys.forEach((entry) =>
-      entry.citations.forEach((c) => (c.index = entry.index))
+      entry.citations.forEach((c) => (c.bibIndex = entry.index))
     );
   }
 
