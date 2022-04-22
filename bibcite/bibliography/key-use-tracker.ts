@@ -1,5 +1,7 @@
 import { Citation } from "../citation";
 
+type KeyGroup = { index: number; citations: Citation[] };
+
 function docPosComp(a: HTMLElement, b: HTMLElement) {
   switch (a.compareDocumentPosition(b)) {
     case Node.DOCUMENT_POSITION_FOLLOWING:
@@ -12,10 +14,10 @@ function docPosComp(a: HTMLElement, b: HTMLElement) {
 }
 
 export class CitationKeyUse {
-  _used_keys: Map<string, { index: number; citations: Citation[] }>;
+  _used_keys: Map<string, KeyGroup>;
   _length: number = 0;
 
-  constructor(used_keys: Map<string, { index: number; citations: Citation[] }>) {
+  constructor(used_keys: Map<string, KeyGroup>) {
     this._used_keys = used_keys;
   }
 
@@ -59,7 +61,7 @@ export class CitationKeyUse {
 export class BibSortedCitationKeyUse extends CitationKeyUse {
   _key_order: Map<string, number>;
   constructor(
-    used_keys: Map<string, { index: number; citations: Citation[] }>,
+    used_keys: Map<string, KeyGroup>,
     key_order: Map<string, number>
   ) {
     super(used_keys);
@@ -99,7 +101,7 @@ export class BibSortedCitationKeyUse extends CitationKeyUse {
 export class InsertionSortedCitationKeyUse extends CitationKeyUse {
   _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
-  constructor(used_keys: Map<string, { index: number; citations: Citation[] }>) {
+  constructor(used_keys: Map<string, KeyGroup>) {
     super(used_keys);
     this.sort_used_keys();
   }
@@ -107,12 +109,13 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
   sort_used_keys() {
     // sort lists of citations for every key
     this._used_keys.forEach((entry) => entry.citations.sort(docPosComp).at(0));
-    const sorted = [...this._used_keys].sort((a, b) =>
-      docPosComp(
-        // compare document position of first citation (i.e. .at(0))
-        (<{ index: number; citations: Citation[] }>a.at(1)).citations.at(0),
-        (<{ index: number; citations: Citation[] }>b.at(1)).citations.at(0)
-      )
+    const sorted = [...this._used_keys].sort(
+      ([_key1, keyGroup1], [_key2, keyGroup2]) =>
+        docPosComp(
+          // compare document position of first citation (i.e. .at(0))
+          keyGroup1.citations.at(0),
+          keyGroup2.citations.at(0)
+        )
     );
 
     sorted.forEach(([_, entry], idx) => (entry.index = idx));
