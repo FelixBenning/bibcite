@@ -1,5 +1,5 @@
 import { Bibliography } from "./bibliography";
-import { comparisons } from "./bibliography/sorting";
+import { comparisons } from "./sorting";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope
