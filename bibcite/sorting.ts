@@ -2,7 +2,7 @@ import { Data } from "csl-json";
 
 export type BibOrder = {comparison: (c1:Data,c2:Data)=>number, inform_citations:boolean};
 
-function nameYearTitle(
+export function nameYearTitle(
   citation_1: Data,
   citation_2: Data
 ) {
@@ -35,7 +35,7 @@ function nameYearTitle(
   return citation_1.title.localeCompare(citation_2.title);
 }
 
-function insertion(
+export function insertion(
   citation_1: Data,
   citation_2: Data
 ){
