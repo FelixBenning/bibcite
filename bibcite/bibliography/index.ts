@@ -87,16 +87,16 @@ export class Bibliography {
     }
   }
 
-  used_references(): { index: string; csl_data: Data }[] {
+  used_references(): { index: number; csl_data: Data }[] {
     if (this._sorting.comparison.name === "insertion") {
       return Array.from(this._cite_key_use.get()).map(([key, entry]) => {
-        return { index: entry.id, csl_data: this._bib[key] };
+        return { index: entry.index, csl_data: this._bib[key] };
       });
     } else {
       return Array.from(this._bib)
         .filter(([key, _]) => this._cite_key_use.has(key))
         .map(([_, csl_data], idx) => {
-          return { index: String(idx), csl_data: csl_data };
+          return { index: idx, csl_data: csl_data };
         });
     }
   }

@@ -23,7 +23,7 @@ export class BibReference extends HTMLElement {
     this._myController.dispatchEvent(event);
   }
 
-  update(used_references: {index: string, csl_data: Data}[]){
+  update(used_references: {index: number, csl_data: Data}[]){
 
   }
 

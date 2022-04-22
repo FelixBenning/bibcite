@@ -12,10 +12,10 @@ function docPosComp(a: HTMLElement, b: HTMLElement) {
 }
 
 export class CitationKeyUse {
-  _used_keys: Map<string, { id: string; citations: Citation[] }>;
+  _used_keys: Map<string, { index: number; citations: Citation[] }>;
   _length: number = 0;
 
-  constructor(used_keys: Map<string, { id: string; citations: Citation[] }>) {
+  constructor(used_keys: Map<string, { index: number; citations: Citation[] }>) {
     this._used_keys = used_keys;
   }
 
@@ -23,12 +23,12 @@ export class CitationKeyUse {
     if (this._used_keys.has(ci.key)) {
       const entry = this._used_keys.get(ci.key);
       entry.citations.push(ci); // add citations to entry
-      ci.identifier = entry.id;
+      ci.index = entry.index;
       return { need_ref_update: false };
     } else {
       this._length += 1;
       const entry = {
-        id: String(this._length),
+        index: this._length,
         citations: [ci],
       };
       this._used_keys.set(ci.key, entry);
@@ -59,7 +59,7 @@ export class CitationKeyUse {
 export class BibSortedCitationKeyUse extends CitationKeyUse {
   _key_order: Map<string, number>;
   constructor(
-    used_keys: Map<string, { id: string; citations: Citation[] }>,
+    used_keys: Map<string, { index: number; citations: Citation[] }>,
     key_order: Map<string, number>
   ) {
     super(used_keys);
@@ -73,7 +73,7 @@ export class BibSortedCitationKeyUse extends CitationKeyUse {
         this._key_order.get(key1) - this._key_order.get(key2)
     );
     sorted.forEach(([_, entry], idx) => {
-      entry.id = String(idx);
+      entry.index = idx;
       entry.citations.forEach((ci) => (ci.index = idx));
     });
     this._used_keys = new Map(sorted);
@@ -99,7 +99,7 @@ export class BibSortedCitationKeyUse extends CitationKeyUse {
 export class InsertionSortedCitationKeyUse extends CitationKeyUse {
   _safe_to_append_key = (_: Citation) => true; // no order issues at first
 
-  constructor(used_keys: Map<string, { id: string; citations: Citation[] }>) {
+  constructor(used_keys: Map<string, { index: number; citations: Citation[] }>) {
     super(used_keys);
     this.sort_used_keys();
   }
@@ -110,12 +110,12 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
     const sorted = [...this._used_keys].sort((a, b) =>
       docPosComp(
         // compare document position of first citation (i.e. .at(0))
-        (<{ id: string; citations: Citation[] }>a.at(1)).citations.at(0),
-        (<{ id: string; citations: Citation[] }>b.at(1)).citations.at(0)
+        (<{ index: number; citations: Citation[] }>a.at(1)).citations.at(0),
+        (<{ index: number; citations: Citation[] }>b.at(1)).citations.at(0)
       )
     );
 
-    sorted.forEach(([_, entry], idx) => (entry.id = String(idx)));
+    sorted.forEach(([_, entry], idx) => (entry.index = idx));
     this._length = sorted.length;
     if (this._length == 0) {
       this._safe_to_append_key = (_: Citation) => true;
@@ -125,9 +125,9 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
     }
     this._used_keys = new Map(sorted);
 
-    // tell citations new identifier
+    // tell citations new index
     this._used_keys.forEach((entry) =>
-      entry.citations.forEach((c) => (c.identifier = entry.id))
+      entry.citations.forEach((c) => (c.index = entry.index))
     );
   }
 
