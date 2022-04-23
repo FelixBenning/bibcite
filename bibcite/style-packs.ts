@@ -55,3 +55,8 @@ export const alphabetic: BibStyle = {
     </tr>
   `,
 };
+
+export const styles = {
+  numeric: numeric,
+  alphabetic: alphabetic,
+};

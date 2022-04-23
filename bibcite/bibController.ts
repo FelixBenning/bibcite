@@ -1,8 +1,10 @@
 import { Bibliography } from "./bibliography";
 import { comparisons } from "./sorting";
+import { BibStyle, styles } from "./style-packs";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope
+  _citeStyle: BibStyle;
   bibliography: Promise<Bibliography>;
 
   constructor() {
@@ -31,7 +33,7 @@ export class BibController extends HTMLElement {
     },
     async ReferenceAdded(event: CustomEvent) {
       console.log("[BibController] caught ReferenceAdded event");
-      const bib:Bibliography = await this.bibliography;
+      const bib: Bibliography = await this.bibliography;
 
       // so that ReferenceRemoved can fire on me even when disconnected
       event.detail.element.myController = this;
@@ -68,7 +70,7 @@ export class BibController extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["bib", "sorting", "citation-style"];
+    return ["bib", "citation-style"];
   }
 
   set innerHTML(value: string) {
@@ -77,22 +79,36 @@ export class BibController extends HTMLElement {
     this.make_bib();
   }
 
-  get citation_style(){
-    return this.getAttribute('citation-style');
+  get citation_style() {
+    return this.getAttribute("citation-style");
   }
 
-  get sorting(){
-    return comparisons[this.getAttribute('sorting') || "insertion"];
+  get sorting() {
+    return comparisons[this.getAttribute("sorting") || "insertion"];
   }
+
+  attributeCallbacks = {
+    bib: async function (newValue) {
+      if (!this.bibliography) {
+        this.bibliography = this.make_bib();
+      }
+      (await this.bibliography).bib = newValue;
+    },
+    "citation-style": async function (newValue) {
+      this._citeStyle = styles[newValue] || styles.alphabetic; // default: alphabetic
+      const bib =<Bibliography> await this.bibliography;
+      bib.citations.forEach(
+        (cit) => (cit.citeStyle = this._citeStyle)
+      );
+      bib._reference_lists.forEach(ref=>ref.citeStyle = this._citeStyle);
+    },
+  };
 
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(
       `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
     );
-    if (!this.bibliography) {
-      this.bibliography = this.make_bib();
-    }
-    this.bibliography[name] = newValue;
+    this.attributeCallbacks[name](newValue);
   }
 
   async make_bib(): Promise<Bibliography> {

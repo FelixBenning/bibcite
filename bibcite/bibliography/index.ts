@@ -82,6 +82,10 @@ export class Bibliography {
     }
   }
 
+  get citations():Citation[]{
+    return this._cite_key_use.citations;
+  }
+
   used_references(): { index: number; csl_data: Data }[] {
     if (this._bibOrder.comparison.name === "insertion") {
       return Array.from(this._cite_key_use.get()).map(([key, entry]) => {

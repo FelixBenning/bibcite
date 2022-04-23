@@ -53,6 +53,12 @@ export class CitationKeyUse {
     return this._used_keys.has(key);
   }
 
+  get citations(): Citation[] {
+    return Array.from(this._used_keys.values())
+      .map((keyGroup) => keyGroup.citations)
+      .flat(1);
+  }
+
   get() {
     return this._used_keys;
   }
