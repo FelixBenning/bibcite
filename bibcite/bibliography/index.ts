@@ -70,7 +70,7 @@ export class Bibliography {
         bib_ref.update(this.used_references());
       }
     }
-    ci.bibData = this._bib[ci.key];
+    ci.bibData = this._bib.get(ci.key);
     console.log(`[Bibliography] Registered ${ci.key}`);
   }
 

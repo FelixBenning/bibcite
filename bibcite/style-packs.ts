@@ -18,7 +18,7 @@ export const numeric: CiteStyle = {
       <td>
         <h3>${bib_data.title}</h3>
         <span>${bib_data.author.join(",")}</span><span>(${
-    bib_data.issued["date-parts"][0]
+    bib_data.issued["date-parts"][0][0]
   })</span>
       </td>
     </tr>
@@ -39,8 +39,11 @@ function letters(authors: Person[]) {
   }
 }
 
-function alphabetic_identifier(_: number, bib_data: Data): string {
-  return letters(bib_data.author) + bib_data.issued["date-parts"][0].slice(-2);
+function alphabetic_identifier(_: number, bibData: Data): string {
+  return (
+    letters(bibData.author) +
+    bibData.issued["date-parts"][0][0].toString().slice(-2)
+  );
 }
 
 export const alphabetic: CiteStyle = {
@@ -53,7 +56,7 @@ export const alphabetic: CiteStyle = {
       <td>
         <h3>${bib_data.title}</h3>
         <span>${bib_data.author.join(",")}
-        </span><span>(${bib_data.issued["date-parts"][0]})</span>
+        </span><span>(${bib_data.issued["date-parts"][0][0]})</span>
       </td>
     </tr>
   `,
