@@ -47,11 +47,10 @@ export class Citation extends HTMLElement {
   }
 
   render() {
-    this.innerHTML = `
-    <a href=#${this.key}>
+    this.innerHTML =
+    `<a href=#${this.key}>
       ${this._citeStyle.identifier(this._bibIndex, this._bibData)}
-    </a>
-    `
+    </a>`;
   }
 
   connectedCallback() {
