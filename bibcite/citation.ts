@@ -19,7 +19,6 @@ export class Citation extends HTMLElement {
 
   set bibIndex(value) {
     this._bibIndex = value;
-    this.setAttribute("id", `cite_${value}`);
     if (this._citeStyle && this._bibData) this.render();
   }
   set citeStyle(citeStyle: CiteStyle) {
