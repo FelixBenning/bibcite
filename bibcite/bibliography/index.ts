@@ -18,8 +18,7 @@ export class Bibliography {
 
   constructor(csl_json: Data[], sorting: (c1: Data, c2: Data) => number) {
     this._bibOrder = { comparison: sorting, inform_citations: false };
-    this._bib = this.sort_and_hash(csl_json, this._bibOrder.comparison);
-    console.log("[Bibliography] Sorted & Hashed CSL:", this._bib);
+    this.bib = csl_json;
 
     if (this._bibOrder.comparison.name === "insertion") {
       this._cite_key_use = new InsertionSortedCitationKeyUse(new Map());
@@ -113,5 +112,6 @@ export class Bibliography {
 
   set bib(value: Data[]) {
     this._bib = this.sort_and_hash(value, this._bibOrder.comparison);
+    console.log("[Bibliography] Sorted & Hashed CSL:", this._bib);
   }
 }
