@@ -75,6 +75,31 @@ export class BibController extends HTMLElement {
     return ["bib", "citation-style"];
   }
 
+  async attributeChangedCallback(name:string, oldValue:string, newValue:string) {
+    console.log(
+      `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
+    );
+    switch (name) {
+      case "bib":
+        if (!this._bibliography) {
+          this.bibliography; // getter for the initialization side-effect
+        } else {
+          (await this.bibliography).bib = await this.csl_from_attribute(
+            newValue
+          );
+        }
+        break;
+      case "citation-style":
+        this.citeStyle = styles[newValue] || styles.alphabetic;
+        break;
+      default:
+        console.error(
+          `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
+          +  `called with unknown attribute ${name}`
+        );
+    }
+  }
+
   set innerHTML(value: string) {
     console.log("[BibController] set innerHTML");
     super.innerHTML = value;
@@ -113,30 +138,6 @@ export class BibController extends HTMLElement {
     return this._bibliography;
   }
 
-  async attributeChangedCallback(name:string, oldValue:string, newValue:string) {
-    console.log(
-      `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
-    );
-    switch (name) {
-      case "bib":
-        if (!this._bibliography) {
-          this.bibliography; // getter for the init side effect
-        } else {
-          (await this.bibliography).bib = await this.csl_from_attribute(
-            newValue
-          );
-        }
-        break;
-      case "citation-style":
-        this.citeStyle = styles[newValue] || styles.alphabetic;
-        break;
-      default:
-        console.error(
-          `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
-          +  `called with unknown attribute ${name}`
-        );
-    }
-  }
   async csl_from_attribute(bib_attr: string): Promise<Data[]> {
     // TODO: add option for bib to be callable?
     if (bib_attr) {
