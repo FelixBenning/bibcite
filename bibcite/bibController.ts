@@ -1,10 +1,10 @@
 import { Bibliography } from "./bibliography";
 import { comparisons } from "./sorting";
-import { BibStyle, styles } from "./style-packs";
+import { CiteStyle, styles } from "./style-packs";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope
-  _citeStyle: BibStyle;
+  _citeStyle: CiteStyle;
   bibliography: Promise<Bibliography>;
 
   constructor() {
@@ -79,12 +79,24 @@ export class BibController extends HTMLElement {
     this.make_bib();
   }
 
-  get citation_style() {
-    return this.getAttribute("citation-style");
+  async propagateCiteStyle(citeStyle: CiteStyle) {
+    const bib = <Bibliography>await this.bibliography;
+    bib.citations.forEach((cit) => (cit.citeStyle = citeStyle));
+    bib._reference_lists.forEach((ref) => (ref.citeStyle = citeStyle));
   }
 
-  get sorting() {
-    return comparisons[this.getAttribute("sorting") || "insertion"];
+  set citeStyle(value: CiteStyle) {
+    this._citeStyle = value;
+    this.propagateCiteStyle(value);
+  }
+
+  get citeStyle() {
+    if (!this._citeStyle) {
+      // default: alphabetic
+      this._citeStyle =
+        styles[this.getAttribute("citation-style")] || styles.alphabetic;
+    }
+    return this._citeStyle;
   }
 
   attributeCallbacks = {
@@ -94,13 +106,8 @@ export class BibController extends HTMLElement {
       }
       (await this.bibliography).bib = newValue;
     },
-    "citation-style": async function (newValue) {
-      this._citeStyle = styles[newValue] || styles.alphabetic; // default: alphabetic
-      const bib =<Bibliography> await this.bibliography;
-      bib.citations.forEach(
-        (cit) => (cit.citeStyle = this._citeStyle)
-      );
-      bib._reference_lists.forEach(ref=>ref.citeStyle = this._citeStyle);
+    "citation-style": function (newValue) {
+      this.citeStyle = styles[newValue] || styles.alphabetic;
     },
   };
 
@@ -118,7 +125,10 @@ export class BibController extends HTMLElement {
     if (bib) {
       console.log("|- bib attribute present -> fetching");
       const response = await fetch(bib);
-      return new Bibliography(await response.json(), this.sorting);
+      return new Bibliography(
+        await response.json(),
+        this.citeStyle.order.comparison
+      );
     } else {
       console.log("|- bib attribute missing -> waiting for innerHTML");
       const htmlLoaded = new Promise((resolve, _) => {
@@ -126,7 +136,10 @@ export class BibController extends HTMLElement {
           resolve(this.innerHTML)
         );
       });
-      return new Bibliography(await htmlLoaded.then(JSON.parse), this.sorting);
+      return new Bibliography(
+        await htmlLoaded.then(JSON.parse),
+        this.citeStyle.order.comparison
+      );
     }
   }
 }

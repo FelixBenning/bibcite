@@ -1,6 +1,6 @@
 import { Data } from "csl-json";
 import { BibController } from "./bibController";
-import { BibStyle } from "./style-packs";
+import { CiteStyle } from "./style-packs";
 
 export class Citation extends HTMLElement {
   _myController: BibController;
@@ -30,7 +30,7 @@ export class Citation extends HTMLElement {
   get key() {
     return this.getAttribute("key");
   }
-  set citeStyle(value:BibStyle){
+  set citeStyle(value:CiteStyle){
   }
 
   set bibInfo(info:Data){
