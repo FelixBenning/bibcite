@@ -5,8 +5,9 @@ import { CiteStyle } from "./style-packs";
 export class Citation extends HTMLElement {
   _myController: BibController;
   _connected: boolean;
-  _bibIndex:number; // id provided by Bibliography (DOM position relative to other Citations)
-  _bibInfo:Data;
+  _bibIndex: number; // index provided by Bibliography if inform_citations in BibOrder of CiteStyle
+  _bibData: Data;
+  _citeStyle: CiteStyle;
 
   constructor() {
     super();
@@ -18,39 +19,40 @@ export class Citation extends HTMLElement {
 
   set bibIndex(value) {
     this._bibIndex = value;
-    this.setAttribute('id', `cite_${value}`);
+    this.setAttribute("id", `cite_${value}`);
+    if (this._citeStyle && this._bibData) this.render();
   }
-  get bibIndex() {
-    return this._bibIndex;
+  set citeStyle(citeStyle: CiteStyle) {
+    this._citeStyle = citeStyle;
+    if (
+      this._bibData &&
+      (this._bibIndex || !this._citeStyle.order.inform_citations)
+    ) {
+      this.render();
+    }
+    this.classList.add(citeStyle.name);
+  }
+  set bibData(bibData: Data) {
+    this._bibData = bibData;
+    if (
+      this._citeStyle &&
+      (this._bibIndex || !this._citeStyle.order.inform_citations)
+    ) {
+      this.render();
+    }
   }
 
-  set key(value) {
-    this.setAttribute("key", value);
-  }
   get key() {
     return this.getAttribute("key");
   }
-  set citeStyle(value:CiteStyle){
-  }
 
-  set bibInfo(info:Data){
-    this._bibInfo = info;
+  render() {
     this.innerHTML = `
-      <span slot="author">${info.author.map(p => p.family).slice(0, /*TODO: how many authors*/1)}</span>
-      <span slot="year">${info.issued["date-parts"][0]}</span>
-      <span slot="title">${info.title}</span>
-      <span slot="publisher">${info.publisher}</span>
-      <span slot="doi">${info.DOI}</span>
-    ` 
-    this.attachShadow({mode: "open"});
-    this.shadowRoot.innerHTML = `
-      <a href=#${this.key}>
-        <slot name='author'></slot>,
-        <slot name='year'></slot>
-      </a>
+    <a href=#${this.key}>
+      ${this._citeStyle.identifier(this._bibIndex, this._bibData)}
+    </a>
     `
   }
-  
 
   connectedCallback() {
     // attributeChangedCallback happens before connection to DOM
@@ -78,7 +80,7 @@ export class Citation extends HTMLElement {
     // can not be dispatched on this as we might be disconnected so bubbling won't work
     this._myController.dispatchEvent(event);
     this._bibIndex = undefined;
-    this.removeAttribute('id');
+    this.removeAttribute("id");
   }
 
   static get observedAttributes() {

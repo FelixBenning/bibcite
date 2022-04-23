@@ -64,16 +64,18 @@ export class Bibliography {
   }
 
   registerCitation(ci: Citation) {
+    // important side-effect in if clause!
     if (this._cite_key_use.add(ci).need_ref_update) {
       for (const bib_ref of this._reference_lists) {
         bib_ref.update(this.used_references());
       }
     }
-    ci.bibInfo = this._bib[ci.key];
+    ci.bibData = this._bib[ci.key];
     console.log(`[Bibliography] Registered ${ci.key}`);
   }
 
   unregisterCitation(ci: Citation) {
+    // important side-effect in if clause!
     if (this._cite_key_use.remove(ci).need_ref_update) {
       for (const bib_ref of this._reference_lists) {
         bib_ref.update(this.used_references());

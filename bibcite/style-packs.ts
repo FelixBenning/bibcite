@@ -2,12 +2,14 @@ import { Data, Person } from "csl-json";
 import { BibOrder, insertion, nameYearTitle } from "./sorting";
 
 export type CiteStyle = {
+  name: string;
   order: BibOrder;
   identifier: (index: number, bib_data: Data) => string;
   bib_entry: (index: number, bib_data: Data) => string;
 };
 
 export const numeric: CiteStyle = {
+  name: "numeric",
   order: { comparison: insertion, inform_citations: true },
   identifier: (index: number, _: Data) => String(index),
   bib_entry: (index: number, bib_data: Data) => `
@@ -42,6 +44,7 @@ function alphabetic_identifier(_: number, bib_data: Data): string {
 }
 
 export const alphabetic: CiteStyle = {
+  name: "alphabetic",
   order: { comparison: nameYearTitle, inform_citations: false },
   identifier: alphabetic_identifier,
   bib_entry: (index: number, bib_data: Data) => `

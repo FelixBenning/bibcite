@@ -34,6 +34,7 @@ export class CitationKeyUse {
         citations: [ci],
       };
       this._used_keys.set(ci.key, entry);
+      ci.bibIndex = entry.index;
       return { need_ref_update: true };
     }
   }
@@ -144,6 +145,9 @@ export class InsertionSortedCitationKeyUse extends CitationKeyUse {
     const update = super.add(ci).need_ref_update;
     if (update) {
       if (this._safe_to_append_key(ci)) {
+        // a new reference was added, it was safe to append, so ci was the the
+        // first usage of it and it came after all other references. The next
+        // new reference needs to come after to be safe to append.
         this._safe_to_append_key = (other) => docPosComp(ci, other) < 0;
       } else {
         this.sort_used_keys();
