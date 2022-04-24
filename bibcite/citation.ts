@@ -77,7 +77,9 @@ export class Citation extends HTMLElement {
   }
   render_paren_cite() {
     const left_delim = this._adjBefore ? "" : this._citeStyle.enclosing[0];
-    const right_delim = this._adjAfter ? ", " : this._citeStyle.enclosing[1];
+    const right_delim = this._adjAfter
+      ? this._citeStyle.multiSeparator
+      : this._citeStyle.enclosing[1];
     return left_delim + this.render_raw_cite() + right_delim;
   }
 
