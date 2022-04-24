@@ -1,11 +1,8 @@
+import { timeStamp } from "console";
 import { Data } from "csl-json";
 import { BibController } from "./bibController";
-import {
-  CiteStyle,
-  CiteType,
-  ensureCiteType,
-  et_al_ify,
-} from "./style-packs";
+import { CiteStyle, CiteType, ensureCiteType, et_al_ify } from "./style-packs";
+import { adjacent_before, adjacent_after } from "./white-space-helper";
 
 export class Citation extends HTMLElement {
   _myController: BibController;
@@ -14,6 +11,8 @@ export class Citation extends HTMLElement {
   _bibData: Data;
   _citeStyle: CiteStyle;
   _citeType: CiteType;
+  _adjBefore: Citation;
+  _adjAfter: Citation;
 
   constructor() {
     super();
@@ -58,33 +57,65 @@ export class Citation extends HTMLElement {
   set citeType(value: string | undefined) {
     this._citeType = ensureCiteType(value);
   }
+  render_text_cite() {
+    return (
+      `<a href=#${this.key}>` +
+      et_al_ify(this._bibData.author) +
+      " " +
+      this._citeStyle.enclosing[0] +
+      this._citeStyle.identifier(this._bibIndex, this._bibData, this.citeType) +
+      this._citeStyle.enclosing[1] +
+      `</a>`
+    );
+  }
+  render_raw_cite() {
+    return (
+      `<a href=#${this.key}>` +
+      this._citeStyle.identifier(this._bibIndex, this._bibData, this.citeType) +
+      "</a>"
+    );
+  }
+  render_paren_cite() {
+    const left_delim = this._adjBefore ? "" : this._citeStyle.enclosing[0];
+    const right_delim = this._adjAfter ? ", " : this._citeStyle.enclosing[1];
+    return left_delim + this.render_raw_cite() + right_delim;
+  }
 
   render() {
+    this.innerHTML = this.pre_render();
+  }
+
+  pre_render() {
     switch (this.citeType) {
       case "text-cite":
-        this.innerHTML = `<a href=#${this.key}>
-          ${et_al_ify(this._bibData.author)}
-          ${this._citeStyle.enclosing[0]}${this._citeStyle.identifier(
-          this._bibIndex,
-          this._bibData,
-          this.citeType
-        )}${this._citeStyle.enclosing[1]}
-          </a>`;
-        break;
-      case "raw-cite": // Fallthrough
+        return this.render_text_cite();
+      case "raw-cite":
+        return this.render_raw_cite();
       case "paren-cite":
-        this.innerHTML = `<a href=#${this.key}>
-            ${this._citeStyle.identifier(
-              this._bibIndex,
-              this._bibData,
-              this.citeType
-            )}
-          </a>`;
-        break;
+        return this.render_paren_cite();
     }
   }
 
+  set adjBefore(value: Citation) {
+    this._adjBefore = value;
+    if (this.sufficient_information()) this.render();
+  }
+
+  set adjAfter(value: Citation) {
+    this._adjAfter = value;
+    if (this.sufficient_information()) this.render();
+  }
+
   connectedCallback() {
+    this.adjBefore = adjacent_before<Citation>(this);
+    this.adjAfter = adjacent_after<Citation>(this);
+    if (this._adjBefore) {
+      this._adjBefore.adjAfter = this;
+    }
+    if (this._adjAfter) {
+      this._adjAfter.adjBefore = this;
+    }
+
     // attributeChangedCallback happens before connection to DOM
     // need to register when connected for correct bubbling
     if (this.key) this.triggerCitationAdded();
@@ -93,6 +124,14 @@ export class Citation extends HTMLElement {
   disconnectedCallback() {
     if (this.key) this.triggerCitationRemoved();
     this._connected = false;
+
+    // inform siblings of departure
+    if (this._adjBefore) {
+      this._adjBefore.adjAfter = this._adjAfter;
+    }
+    if (this._adjAfter) {
+      this._adjAfter.adjBefore = this._adjBefore;
+    }
   }
 
   triggerCitationAdded() {
