@@ -1,16 +1,51 @@
 import { Data, Person } from "csl-json";
 import { BibOrder, insertion, nameYearTitle } from "./sorting";
 
+
+
+export const citeTypes = ["text-cite", "raw-cite", "paren-cite"] as const;
+export type CiteType =  typeof citeTypes[number];
+
+export function isCiteType(test:string): test is CiteType {
+  return (<readonly string[]> citeTypes).includes(test); 
+}
+
+export function et_al_ify(authors: Person[]): string{
+  const names = authors.map(p=>p["non-dropping-particle"] || "" + " " + p.family);
+  return names[0] +(names.length>1 ? "" : " et al.")
+}
+
+export function ensureCiteType(value:string | undefined): CiteType {
+    if (isCiteType(value)) return value;
+    else if (typeof value === "undefined") {
+      console.log(`Missing Citation type, fallback to "paren-cite"`)
+    }
+    else {
+      console.error(
+        `[Citation] Unknown Citation type ${value}, fallback to "paren-cite"`
+      );
+    }
+    return "paren-cite";
+}
+
 export type CiteStyle = {
   name: string;
   order: BibOrder;
-  identifier: (index: number, bib_data: Data) => string;
+  enclosing: [string, string];
+  multiSeparator: string;
+  identifier: (
+    index: number,
+    bib_data: Data,
+    citeType: CiteType
+  ) => string;
   bib_entry: (index: number, bib_data: Data) => string;
 };
 
 export const numeric: CiteStyle = {
   name: "numeric",
   order: { comparison: insertion, inform_citations: true },
+  enclosing: ["[", "]"],
+  multiSeparator: ",",
   identifier: (index: number, _: Data) => String(index),
   bib_entry: (index: number, bib_data: Data) => `
     <tr>
@@ -50,6 +85,8 @@ export const alphabetic: CiteStyle = {
   name: "alphabetic",
   order: { comparison: nameYearTitle, inform_citations: false },
   identifier: alphabetic_identifier,
+  enclosing: ["[", "]"],
+  multiSeparator: ";",
   bib_entry: (index: number, bib_data: Data) => `
     <tr>
       <td>[${alphabetic_identifier(index, bib_data)}]</td>
