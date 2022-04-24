@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import { Data } from "csl-json";
 import { BibController } from "./bibController";
 import { CiteStyle, CiteType, ensureCiteType, et_al_ify } from "./style-packs";
@@ -10,7 +9,7 @@ export class Citation extends HTMLElement {
   _bibIndex: number; // index provided by Bibliography if inform_citations in BibOrder of CiteStyle
   _bibData: Data;
   _citeStyle: CiteStyle;
-  _citeType: CiteType;
+  _citeType: CiteType; // e.g. text-cite: like Author (Year) found... / paren-cite: the sky is blue (Author Year)
   _adjBefore: Citation;
   _adjAfter: Citation;
 
