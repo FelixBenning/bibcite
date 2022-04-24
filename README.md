@@ -42,7 +42,7 @@ you can do the following:
 
 There will be a way to do customization in the future. Styles are types
 
-```javascript
+```typescript
 type CiteStyle = {
   name: string;
   order: BibOrder;
@@ -56,7 +56,7 @@ type CiteStyle = {
 
 so the numeric style for example is implemented like this:
 
-```javascript
+```typescript
 export const numeric: CiteStyle = {
   name: "numeric",
   order: { comparison: insertion, inform_citations: true },
