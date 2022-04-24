@@ -93,7 +93,7 @@ export const alphabetic: CiteStyle = {
       <td>[${alphabetic_identifier(index, bib_data)}]</td>
       <td>
         <h3>${bib_data.title}</h3>
-        <span>${bib_data.author.map((p) => p.family).join(",")}
+        <span>${bib_data.author.map((p) => p.family).join(", ")}
         </span><span>(${bib_data.issued["date-parts"][0][0]})</span>
       </td>
     </tr>
