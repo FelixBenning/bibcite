@@ -1,5 +1,5 @@
 /**
- *  Taken from https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace#whitespace_helper_functions
+ *  Compare with https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace#whitespace_helper_functions
  *
  * Throughout, whitespace is defined as one of the characters
  *  "\t" TAB \u0009
