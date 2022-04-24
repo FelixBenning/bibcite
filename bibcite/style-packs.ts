@@ -1,31 +1,30 @@
 import { Data, Person } from "csl-json";
 import { BibOrder, insertion, nameYearTitle } from "./sorting";
 
-
-
 export const citeTypes = ["text-cite", "raw-cite", "paren-cite"] as const;
-export type CiteType =  typeof citeTypes[number];
+export type CiteType = typeof citeTypes[number];
 
-export function isCiteType(test:string): test is CiteType {
-  return (<readonly string[]> citeTypes).includes(test); 
+export function isCiteType(test: string): test is CiteType {
+  return (<readonly string[]>citeTypes).includes(test);
 }
 
-export function et_al_ify(authors: Person[]): string{
-  const names = authors.map(p=>p["non-dropping-particle"] || "" + " " + p.family);
-  return names[0] +(names.length>1 ? " et al.": "")
+export function et_al_ify(authors: Person[]): string {
+  const names = authors.map(
+    (p) => p["non-dropping-particle"] || "" + " " + p.family
+  );
+  return names[0] + (names.length > 1 ? " et al." : "");
 }
 
-export function ensureCiteType(value:string | undefined): CiteType {
-    if (isCiteType(value)) return value;
-    else if (typeof value === "undefined") {
-      console.log(`Missing Citation type, fallback to "paren-cite"`)
-    }
-    else {
-      console.error(
-        `[Citation] Unknown Citation type ${value}, fallback to "paren-cite"`
-      );
-    }
-    return "paren-cite";
+export function ensureCiteType(value: string | undefined): CiteType {
+  if (isCiteType(value)) return value;
+  else if (typeof value === "undefined") {
+    console.log(`Missing Citation type, fallback to "paren-cite"`);
+  } else {
+    console.error(
+      `[Citation] Unknown Citation type ${value}, fallback to "paren-cite"`
+    );
+  }
+  return "paren-cite";
 }
 
 export type CiteStyle = {
@@ -33,12 +32,9 @@ export type CiteStyle = {
   order: BibOrder;
   enclosing: [string, string];
   multiSeparator: string;
-  identifier: (
-    index: number,
-    bib_data: Data,
-    citeType: CiteType
-  ) => string;
+  identifier: (index: number, bib_data: Data, citeType: CiteType) => string;
   bib_entry: (index: number, bib_data: Data) => string;
+  reference: (content: string) => string;
 };
 
 export const numeric: CiteStyle = {
@@ -52,11 +48,16 @@ export const numeric: CiteStyle = {
       <td>[${index}]</td>
       <td>
         <h3>${bib_data.title}</h3>
-        <span>${bib_data.author.join(",")}</span><span>(${
-    bib_data.issued["date-parts"][0][0]
-  })</span>
+        <span>${bib_data.author.map((p) => p.family).join(", ")}</span>
+        <span>(${bib_data.issued["date-parts"][0][0]})</span>
       </td>
     </tr>
+  `,
+  reference: (content: string) =>
+    `<h2>References</h2>
+  <table>
+    ${content}
+  </table>
   `,
 };
 
@@ -92,10 +93,16 @@ export const alphabetic: CiteStyle = {
       <td>[${alphabetic_identifier(index, bib_data)}]</td>
       <td>
         <h3>${bib_data.title}</h3>
-        <span>${bib_data.author.join(",")}
+        <span>${bib_data.author.map((p) => p.family).join(",")}
         </span><span>(${bib_data.issued["date-parts"][0][0]})</span>
       </td>
     </tr>
+  `,
+  reference: (content: string) =>
+    `<h2>References</h2>
+  <table>
+    ${content}
+  </table>
   `,
 };
 

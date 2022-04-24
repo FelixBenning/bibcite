@@ -32,7 +32,7 @@ export class Bibliography {
     }
   }
 
-  sort_and_hash(csl_json: Data[], comparison:(c1:Data,c2:Data)=>number) {
+  sort_and_hash(csl_json: Data[], comparison: (c1: Data, c2: Data) => number) {
     return new Map(
       csl_json
         // sort function should be argument of this function and be better
@@ -67,7 +67,7 @@ export class Bibliography {
     // important side-effect in if clause!
     if (this._cite_key_use.add(ci).need_ref_update) {
       for (const bib_ref of this._reference_lists) {
-        bib_ref.update(this.used_references());
+        bib_ref.usedReferences = this.used_references();
       }
     }
     ci.bibData = this._bib.get(ci.key);
@@ -78,19 +78,19 @@ export class Bibliography {
     // important side-effect in if clause!
     if (this._cite_key_use.remove(ci).need_ref_update) {
       for (const bib_ref of this._reference_lists) {
-        bib_ref.update(this.used_references());
+        bib_ref.usedReferences = this.used_references();
       }
     }
   }
 
-  get citations():Citation[]{
+  get citations(): Citation[] {
     return this._cite_key_use.citations;
   }
 
   used_references(): { index: number; csl_data: Data }[] {
     if (this._bibOrder.comparison.name === "insertion") {
       return Array.from(this._cite_key_use.get()).map(([key, entry]) => {
-        return { index: entry.index, csl_data: this._bib[key] };
+        return { index: entry.index, csl_data: this._bib.get(key) };
       });
     } else {
       return Array.from(this._bib)
@@ -101,8 +101,9 @@ export class Bibliography {
     }
   }
 
-  registerReferenceList(referenceElement) {
-    this._reference_lists.push(referenceElement);
+  registerReferenceList(bibReference: BibReference) {
+    this._reference_lists.push(bibReference);
+    bibReference.usedReferences = this.used_references();
     console.log("[Bibliography] Registered ReferenceList");
   }
   unregisterReferenceList(referenceElement) {

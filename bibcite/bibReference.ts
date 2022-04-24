@@ -2,10 +2,14 @@ import { Data } from "csl-json";
 import { BibController } from "./bibController";
 import { CiteStyle } from "./style-packs";
 
-export class BibReference extends HTMLElement {
-  _myController: BibController;
+type Reference = { index: number; csl_data: Data };
 
-  set myController(value:BibController){
+export class BibReference extends HTMLElement {
+  _citeStyle: CiteStyle;
+  _myController: BibController;
+  _usedReferences: Reference[];
+
+  set myController(value: BibController) {
     this._myController = value;
   }
 
@@ -16,20 +20,31 @@ export class BibReference extends HTMLElement {
     });
     this.dispatchEvent(event);
   }
-  disconnectedCallback(){
+  disconnectedCallback() {
     const event = new CustomEvent("ReferenceRemoved", {
       bubbles: false,
-      detail: {element: this},
+      detail: { element: this },
     });
     this._myController.dispatchEvent(event);
   }
 
-  set citeStyle(style:CiteStyle){
-
+  set citeStyle(style: CiteStyle) {
+    console.log("[Reference] set citeStyle");
+    this._citeStyle = style;
+    if (this._usedReferences) this.render();
+  }
+  render() {
+    console.log("[Reference] rendering");
+    this.innerHTML = this._citeStyle.reference(
+      this._usedReferences
+        .map((ref) => this._citeStyle.bib_entry(ref.index, ref.csl_data))
+        .join("")
+    );
   }
 
-  update(used_references: {index: number, csl_data: Data}[]){
-
+  set usedReferences(references: Reference[]) {
+    console.log("[Reference] set usedReferences", references);
+    this._usedReferences = references;
+    if (this._citeStyle) this.render();
   }
-
 }
