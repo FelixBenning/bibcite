@@ -5,7 +5,6 @@ import {
   CiteType,
   ensureCiteType,
   et_al_ify,
-  isCiteType,
 } from "./style-packs";
 
 export class Citation extends HTMLElement {
