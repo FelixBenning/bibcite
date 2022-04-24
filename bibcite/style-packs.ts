@@ -12,7 +12,7 @@ export function isCiteType(test:string): test is CiteType {
 
 export function et_al_ify(authors: Person[]): string{
   const names = authors.map(p=>p["non-dropping-particle"] || "" + " " + p.family);
-  return names[0] +(names.length>1 ? "" : " et al.")
+  return names[0] +(names.length>1 ? " et al.": "")
 }
 
 export function ensureCiteType(value:string | undefined): CiteType {
