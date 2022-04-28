@@ -1,4 +1,4 @@
-import { Citation } from "../citation";
+import { Citation } from "./citation";
 
 type KeyGroup = { index: number; citations: Citation[] };
 

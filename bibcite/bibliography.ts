@@ -1,14 +1,14 @@
 // AVOID DOM RELATED STUFF HERE! -> allow use in build-time mechanism
 
 import { Data } from "csl-json";
-import { Citation } from "../citation";
-import { BibReference } from "../bibReference";
+import { Citation } from "./citation";
+import { BibReference } from "./bibReference";
 import {
   CitationKeyUse,
   BibSortedCitationKeyUse,
   InsertionSortedCitationKeyUse,
 } from "./key-use-tracker";
-import { BibOrder } from "../sorting";
+import { BibOrder } from "./sorting";
 
 export class Bibliography {
   _bib: Map<string, Data>; // hashed and sorted CSL-json data
