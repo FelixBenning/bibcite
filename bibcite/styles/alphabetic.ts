@@ -1,5 +1,5 @@
 import { Data } from "csl-json";
-import { nameYearTitle } from "../sorting";
+import { nameYearTitle } from "../order";
 import { CiteStyle } from "./types";
 import { alphabetic_identifier } from "./helpers";
 

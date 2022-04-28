@@ -1,5 +1,5 @@
 import { Data } from "csl-json";
-import { BibOrder } from "../sorting";
+import { BibOrder } from "../order";
 
 export const citeTypes = ["text-cite", "raw-cite", "paren-cite"] as const;
 export type CiteType = typeof citeTypes[number];

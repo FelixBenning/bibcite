@@ -1,6 +1,6 @@
 import { Data } from "csl-json";
 import { CiteStyle } from "./types";
-import { insertion } from "../sorting";
+import { insertion } from "../order";
 
 export const numeric: CiteStyle = {
   name: "numeric",

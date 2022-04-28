@@ -8,7 +8,7 @@ import {
   BibSortedCitationKeyUse,
   InsertionSortedCitationKeyUse,
 } from "./key-use-tracker";
-import { BibOrder } from "./sorting";
+import { BibOrder } from "./order";
 
 export class Bibliography {
   _bib: Map<string, Data>; // hashed and sorted CSL-json data
