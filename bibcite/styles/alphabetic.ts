@@ -10,12 +10,13 @@ export const alphabetic: CiteStyle = {
   enclosing: ["[", "]"],
   multiSeparator: ";",
   bib_entry: (index: number, bib_data: Data) => `
-    <tr>
+    <tr style="vertical-align:top">
       <td>[${alphabetic_identifier(index, bib_data)}]</td>
-      <td>
-        <h3>${bib_data.title}</h3>
-        <span>${bib_data.author.map((p) => p.family).join(", ")}
-        </span><span>(${bib_data.issued["date-parts"][0][0]})</span>
+      <td><strong>${bib_data.title}</strong>
+        <p>
+          <span>${bib_data.author.map((p) => p.family).join(", ")}
+          </span><span>(${bib_data.issued["date-parts"][0][0]})</span>
+        </p>
       </td>
     </tr>
   `,
