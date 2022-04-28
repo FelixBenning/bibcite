@@ -1,6 +1,6 @@
 import { Data } from "csl-json";
 import { BibController } from "./bibController";
-import { CiteStyle } from "./style-packs";
+import { CiteStyle } from "./styles/types";
 
 type Reference = { index: number; csl_data: Data };
 

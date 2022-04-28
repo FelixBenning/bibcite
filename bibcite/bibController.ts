@@ -2,7 +2,8 @@ import { Data } from "csl-json";
 import { Bibliography } from "./bibliography";
 import { BibReference } from "./bibReference";
 import { Citation } from "./citation";
-import { CiteStyle, styles } from "./style-packs";
+import { CiteStyle } from "./styles/types";
+import { styles } from "./styles";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope

@@ -1,6 +1,7 @@
 import { Data } from "csl-json";
 import { BibController } from "./bibController";
-import { CiteStyle, CiteType, ensureCiteType, et_al_ify } from "./style-packs";
+import { CiteStyle, CiteType, ensureCiteType } from "./styles/types";
+import { et_al_ify } from "./styles/helpers";
 import { adjacent_before, adjacent_after } from "./white-space-helper";
 
 export class Citation extends HTMLElement {
