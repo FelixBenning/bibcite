@@ -35,11 +35,11 @@ export class Citation extends HTMLElement {
     if (this.sufficient_information()) this.render();
   }
 
-  sufficient_information() {
+  sufficient_information(): boolean {
     return (
-      this._citeStyle &&
-      this._bibData &&
-      (this._bibIndex || this._citeStyle.order.inform_citations)
+      Boolean(this._citeStyle) &&
+      Boolean(this._bibData) &&
+      (Boolean(this._bibIndex) || !this._citeStyle.order.inform_citations)
     );
   }
 

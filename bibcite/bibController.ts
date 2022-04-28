@@ -3,7 +3,7 @@ import { Bibliography } from "./bibliography";
 import { BibReference } from "./bibReference";
 import { Citation } from "./citation";
 import { CiteStyle } from "./styles/types";
-import { styles } from "./styles";
+import { styles, fallbackStyle } from "./styles";
 
 export class BibController extends HTMLElement {
   _scope; // only control citations which are children of this scope
@@ -91,7 +91,7 @@ export class BibController extends HTMLElement {
         }
         break;
       case "citation-style":
-        this.citeStyle = styles[newValue] || styles.alphabetic;
+        this.citeStyle = styles.get(newValue) || fallbackStyle;
         break;
       default:
         console.error(
@@ -125,7 +125,7 @@ export class BibController extends HTMLElement {
     if (!this._citeStyle) {
       // default: alphabetic
       this._citeStyle =
-        styles[this.getAttribute("citation-style")] || styles.alphabetic;
+        styles.get(this.getAttribute("citation-style")) || fallbackStyle;
     }
     return this._citeStyle;
   }
