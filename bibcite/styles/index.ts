@@ -5,10 +5,10 @@ import { CiteStyle } from "./types";
 export let styles = new Map<string, CiteStyle>();
 export const fallbackStyle = alphabetic;
 
-export function addStyle(name: string, definition: CiteStyle) {
-  styles.set(name, definition);
+export function addStyle(sty: CiteStyle) {
+  styles.set(sty.name, sty);
 }
 
 // default styles
-addStyle("numeric", numeric);
-addStyle("alphabetic", alphabetic);
+addStyle(numeric);
+addStyle(alphabetic);
