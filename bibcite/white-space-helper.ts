@@ -84,18 +84,18 @@ function isElement(node: Node): node is Element {
 
 export function adjacent_before<T extends Element>(sib: T): T {
   const prev_node = node_before(sib);
-  if(isElement(prev_node)) {
-    if(prev_node.tagName === sib.tagName) {
-      return <T> prev_node;
+  if (isElement(prev_node)) {
+    if (prev_node.tagName === sib.tagName) {
+      return <T>prev_node;
     }
   }
   return null;
 }
 export function adjacent_after<T extends Element>(sib: T): T {
   const prev_node = node_after(sib);
-  if(isElement(prev_node)) {
-    if(prev_node.tagName === sib.tagName) {
-      return <T> prev_node;
+  if (isElement(prev_node)) {
+    if (prev_node.tagName === sib.tagName) {
+      return <T>prev_node;
     }
   }
   return null;

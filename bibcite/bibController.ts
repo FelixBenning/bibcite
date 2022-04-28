@@ -19,7 +19,7 @@ export class BibController extends HTMLElement {
     async CitationAdded(event: CustomEvent) {
       console.log("[BibController] caught CitationAdded event");
       const bib = await this.bibliography;
-      const citation:Citation = event.detail.element;
+      const citation: Citation = event.detail.element;
 
       // so that the Citation can fire CitationRemoved on me even when disconnected
       citation.myController = this;
@@ -76,7 +76,11 @@ export class BibController extends HTMLElement {
     return ["bib", "citation-style"];
   }
 
-  async attributeChangedCallback(name:string, oldValue:string, newValue:string) {
+  async attributeChangedCallback(
+    name: string,
+    oldValue: string,
+    newValue: string
+  ) {
     console.log(
       `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
     );
@@ -95,8 +99,8 @@ export class BibController extends HTMLElement {
         break;
       default:
         console.error(
-          `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})`
-          +  `called with unknown attribute ${name}`
+          `[BibController] attributeChangedCallback(${name}, ${oldValue}, ${newValue})` +
+            `called with unknown attribute ${name}`
         );
     }
   }
@@ -106,7 +110,7 @@ export class BibController extends HTMLElement {
     super.innerHTML = value;
     if (!this.getAttribute("bib")) {
       // attribute has priority
-      this.bibliography.then(res=>res.bib=JSON.parse(value));
+      this.bibliography.then((res) => (res.bib = JSON.parse(value)));
     }
   }
 
@@ -134,7 +138,7 @@ export class BibController extends HTMLElement {
     if (!this._bibliography) {
       this._bibliography = this.csl_from_attribute(
         this.getAttribute("bib")
-      ).then(csl=> new Bibliography(csl, this.citeStyle.order.comparison));
+      ).then((csl) => new Bibliography(csl, this.citeStyle.order.comparison));
     }
     return this._bibliography;
   }
