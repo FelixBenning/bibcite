@@ -58,7 +58,7 @@ jobs:
             git config --local user.email "noreply.actions@github.com"
             git add --all
             (git diff-index --quiet HEAD || git commit -m ${GITHUB_SHA})
-            git tag $full_version 
+            git tag v$full_version 
             git tag -f v$minor_version
             git tag -f v$major_version
             echo "Push"
