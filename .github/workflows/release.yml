@@ -32,7 +32,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 'lts/*'
           cache: npm
       
       - name: Install Dependencies
@@ -42,28 +42,7 @@ jobs:
         run: npm run build
       
       - name: Release
-        run: |
-          npm publish && (
-            echo "Successful Release, creating env vars"
-              full_version=`node -p "require('./package.json').version"`
-              echo "Full Version: $full_version"
-              minor_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1.\2/'`
-              echo "Minor Version: $minor_version"
-              major_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1/'`
-              echo "Major Version: $major_version"
-            echo "Copying build to releases"
-              cp -r dist releases
-            echo "Commit and Tag"
-              cd releases
-              git config --local user.name "Github Action"
-              git config --local user.email "noreply.actions@github.com"
-              git add --all
-              (git diff-index --quiet HEAD || git commit -m ${GITHUB_SHA})
-              git tag v$full_version 
-              git tag -f v$minor_version
-              git tag -f v$major_version
-            echo "Push"
-              git push -f --tags
-          )
+        run: npx semantic-release --dry-run
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
