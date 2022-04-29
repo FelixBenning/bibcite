@@ -59,7 +59,8 @@ jobs:
             git add --all
             (git diff-index --quiet HEAD || git commit -m ${GITHUB_SHA})
             git tag $full_version 
-            git tag -f v$minor_version v$major_version
+            git tag -f v$minor_version
+            git tag -f v$major_version
             echo "Push"
             git push --follow-tags
           ) || echo "No Version Bump, No Release"
