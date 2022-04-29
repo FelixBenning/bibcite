@@ -45,9 +45,11 @@ jobs:
         run: >
           echo "Successful Release, creating env vars"
           && full_version=`node -p "require('./package.json').version"`
-          && echo $full_version
+          && echo "Full Version: $full_version"
           && minor_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1.\2/'`
-          && major_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1'`
+          && echo "Minor Version: $minor_version"
+          && major_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1/'`
+          && echo "Major Version: $major_version"
           && echo "Copying build to releases"
           && cp -r dist releases
           && echo "Commit and Tag"
