@@ -63,7 +63,7 @@ jobs:
               git tag -f v$minor_version
               git tag -f v$major_version
             echo "Push"
-              git push --tags
+              git push -f --tags
           )
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
