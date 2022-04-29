@@ -103,5 +103,5 @@ I still need to figure out how to do plugin loading here though.
 
 [zotero]: https://www.zotero.org/
 [export-csl-explanation]: https://github.com/FelixBenning/bibcite/blob/main/docs/export-csl-json.md
-[releases]: https://github.com/FelixBenning/bibcite/blob
+[releases]: https://github.com/FelixBenning/bibcite/blob/releases/Readme.md
 [npm-bibcite]: https://www.npmjs.com/package/bibcite
