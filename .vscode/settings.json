@@ -1,0 +1,4 @@
+{
+  // releases force modify major tags which causes conflicts if you pull before and after
+	"git.pullTags": false,
+}
