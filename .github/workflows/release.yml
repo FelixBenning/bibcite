@@ -45,19 +45,19 @@ jobs:
         run: >
           npm publish
           && echo "Successful Release, creating env vars"
-            && full_version=`node -p "require('./package.json').version`
-            && minor_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1.\2/'`
-            && major_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1'`
+          && full_version=`node -p "require('./package.json').version`
+          && minor_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1.\2/'`
+          && major_version=`echo $full_version | sed -E 's/([0-9]*)\.([0-9]*)\.([0-9]*).*/\1'`
           && echo "Copying build to releases"
-            && cp -r dist releases
+          && cp -r dist releases
           && echo "Commit and Tag"
-            && cd releases
-            && git add --all
-            && (git diff-index --quiet HEAD || git commit -m ${GITHUB_SHA})
-            && git tag $full_version 
-            && git tag -d v$minor_version v$major_version
+          && cd releases
+          && git add --all
+          && (git diff-index --quiet HEAD || git commit -m ${GITHUB_SHA})
+          && git tag $full_version 
+          && git tag -d v$minor_version v$major_version
           && echo "Push"
-            && git push
+          && git push
           || echo "No Version Bump, No Release"
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
