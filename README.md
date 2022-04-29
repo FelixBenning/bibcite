@@ -1,27 +1,39 @@
 
 # Bibcite
 
+BibTeX or BibLaTeX like citation for HTML.
+
 > Brand new and (probably) full of bugs
 
-Provided you have a `CSL-JSON` file of your references (i.e. `references.json`)
-you can do the following:
+## Browser Usage
 
-```html
-<head>
-	<script src="bibcite.js"></script>
-	<bib-config bib="references.json"></bib-config>
-</head>
-<body>
-	<p>
-		This is an example of parenthical citation:
-		<bib-cite key="id in references.json"></bib-cite>
-	</p>
 
-	<bib-references></bib-references>
-</body>
-```
+1. Export your library from your favorite reference management software (e.g.
+[Zotero][zotero]) in the CSL-JSON format ([Detailed
+Explanation][export-csl-explanation]).
+2. Obtain the Javascript file of Bibcite ([See
+Releases][releases])
+3. Assuming you have an exported `csl-json` file, which we are going to call
+`references.json` from now on (but you can use any other filename). And a link
+to the JS file of `bibcite` (here called `bibcite.js`) you can do the following in
+an html file
 
-## Configuration Options
+    ```html
+    <head>
+      <script src="bibcite.js"></script>
+      <bib-config bib="references.json"></bib-config>
+    </head>
+    <body>
+      <p>
+        This is an example of parenthical citation:
+        <bib-cite key="id in references.json"></bib-cite>
+      </p>
+
+      <bib-references></bib-references>
+    </body>
+    ```
+
+### Configuration Options
 
 1. At the moment there are two citation-styles `alphabetic`(default) and
 `numeric` you can select them like this:
@@ -32,15 +44,20 @@ you can do the following:
 
 2. There are three types of citations inspired by BibLaTeX `\textcite`,
 `\parencite` and `\rawcite`. You can set the `type` of `bib-cite` to either
-	`paren-cite` (default) `text-cite` or `raw-cite`, i.e.
+	`paren-cite` (default) `text-cite` or `raw-cite`, e.g.
 
 	```html
 	<bib-cite key="id_key" type="text-cite"></bib-cite>
 	```
 
-## Custom Styles
+## Node Module
 
-There will be a way to do customization in the future. Styles are types
+You can find [`bibcite` on npm][npm-bibcite].
+
+### Custom Styles
+
+There will be a way to do customization in the future. Styles are Typescript
+types
 
 ```typescript
 type CiteStyle = {
@@ -83,3 +100,8 @@ export const numeric: CiteStyle = {
 ```
 
 I still need to figure out how to do plugin loading here though.
+
+[zotero]: https://www.zotero.org/
+[export-csl-explanation]: https://github.com/FelixBenning/bibcite/blob/main/docs/export-csl-json.md
+[releases]: https://github.com/FelixBenning/bibcite/blob
+[npm-bibcite]: https://www.npmjs.com/package/bibcite
