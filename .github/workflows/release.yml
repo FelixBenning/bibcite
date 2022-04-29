@@ -62,7 +62,7 @@ jobs:
             git tag -f v$minor_version
             git tag -f v$major_version
             echo "Push"
-            git push --follow-tags
+            git push --tags
           ) || echo "No Version Bump, No Release"
         env:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
