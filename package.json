@@ -1,6 +1,6 @@
 {
   "name": "bibcite",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Citations with Bibliography",
   "main": "index.js",
   "scripts": {
