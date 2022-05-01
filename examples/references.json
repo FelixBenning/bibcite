@@ -1,4 +1,157 @@
 [
-  {"id":"amirEffectsEntryCournot2000","author":[{"family":"Amir","given":"Rabah"},{"family":"Lambson","given":"Val E."}],"citation-key":"amirEffectsEntryCournot2000","container-title":"The Review of Economic Studies","issue":"2","issued":{"date-parts":[[2000]]},"page":"235–254","publisher":"[Oxford University Press, Review of Economic Studies, Ltd.]","source":"Google Scholar","title":"On the effects of entry in Cournot markets","type":"article-journal","volume":"67"},
-  {"id":"mas-colellMicroeconomicTheory1995","author":[{"family":"Mas-Colell","given":"Andreu"},{"family":"Whinston","given":"Michael Dennis"},{"family":"Green","given":"Jerry R."}],"citation-key":"mas-colellMicroeconomicTheory1995","issued":{"date-parts":[[1995]]},"publisher":"Oxford university press New York","source":"Google Scholar","title":"Microeconomic theory","type":"book","volume":"1"}
+  {
+    "$schema": "https://raw.githubusercontent.com/citation-style-language/schema/v1.0/schemas/input/csl-data.json",
+    "id": "amirEffectsEntryCournot2000",
+    "author": [
+      { "family": "Amir", "given": "Rabah" },
+      { "family": "Lambson", "given": "Val E." }
+    ],
+    "citation-key": "amirEffectsEntryCournot2000",
+    "container-title": "The Review of Economic Studies",
+    "issue": "2",
+    "issued": { "date-parts": [[2000]] },
+    "page": "235–254",
+    "publisher": "[Oxford University Press, Review of Economic Studies, Ltd.]",
+    "source": "Google Scholar",
+    "title": "On the effects of entry in Cournot markets",
+    "type": "article-journal",
+    "volume": "67"
+  },
+  {
+    "id": "mas-colellMicroeconomicTheory1995",
+    "author": [
+      { "family": "Mas-Colell", "given": "Andreu" },
+      { "family": "Whinston", "given": "Michael Dennis" },
+      { "family": "Green", "given": "Jerry R." }
+    ],
+    "citation-key": "mas-colellMicroeconomicTheory1995",
+    "issued": { "date-parts": [[1995]] },
+    "publisher": "Oxford university press New York",
+    "source": "Google Scholar",
+    "title": "Microeconomic theory",
+    "type": "book",
+    "volume": "1"
+  },
+  {
+    "id": "dsouzaParserExtractionTriples2018",
+    "abstract": "The web contains vast repositories of unstructured text. We investigate the opportunity for building a knowledge graph from these text sources. We generate a set of triples which can be used in knowledge gathering and integration. We deﬁne the architecture of a language compiler for processing subjectpredicate-object triples using the OpenNLP parser. We implement a depth-ﬁrst search traversal on the POS tagged syntactic tree appending predicate and object information. A parser enables higher precision and higher recall extractions of syntactic relationships across conjunction boundaries. We are able to extract 2-2.5 times the correct extractions of ReVerb. The extractions are used in a variety of semantic web applications and question answering. We verify extraction of 50,000 triples on the ClueWeb dataset.",
+    "accessed": { "date-parts": [[2021, 6, 5]] },
+    "author": [{ "family": "D'Souza", "given": "Shaun" }],
+    "citation-key": "dsouzaParserExtractionTriples2018",
+    "DOI": "10.48550/arXiv.1811.05768",
+    "issued": { "date-parts": [[2018, 11, 6]] },
+    "language": "en",
+    "source": "arXiv.org",
+    "title": "Parser Extraction of Triples in Unstructured Text",
+    "type": "article-journal",
+    "URL": "http://arxiv.org/abs/1811.05768"
+  },
+  {
+    "id": "haussmannFoodKGSemanticsDrivenKnowledge2019",
+    "abstract": "The proliferation of recipes and other food information on the Web presents an opportunity for discovering and organizing diet-related knowledge into a knowledge graph. Currently, there are several ontologies related to food, but they are specialized in specific domains, e.g., from an agricultural, production, or specific health condition point-of-view. There is a lack of a unified knowledge graph that is oriented towards consumers who want to eat healthily, and who need an integrated food suggestion service that encompasses food and recipes that they encounter on a day-to-day basis, along with the provenance of the information they receive. Our resource contribution is a software toolkit that can be used to create a unified food knowledge graph that links the various silos related to food while preserving the provenance information. We describe the construction process of our knowledge graph, the plan for its maintenance, and how this knowledge graph has been utilized in several applications. These applications include a SPARQL-based service that lets a user determine what recipe to make based on ingredients at hand while taking constraints such as allergies into account, as well as a cognitive agent that can perform natural language question answering on the knowledge graph. Resource Website: https://foodkg.github.io",
+    "author": [
+      { "family": "Haussmann", "given": "Steven" },
+      { "family": "Seneviratne", "given": "Oshani" },
+      { "family": "Chen", "given": "Yu" },
+      { "family": "Ne’eman", "given": "Yarden" },
+      { "family": "Codella", "given": "James" },
+      { "family": "Chen", "given": "Ching-Hua" },
+      { "family": "McGuinness", "given": "Deborah L." },
+      { "family": "Zaki", "given": "Mohammed J." }
+    ],
+    "citation-key": "haussmannFoodKGSemanticsDrivenKnowledge2019",
+    "collection-title": "Lecture Notes in Computer Science",
+    "container-title": "The Semantic Web – ISWC 2019",
+    "DOI": "10.1007/978-3-030-30796-7_10",
+    "editor": [
+      { "family": "Ghidini", "given": "Chiara" },
+      { "family": "Hartig", "given": "Olaf" },
+      { "family": "Maleshkova", "given": "Maria" },
+      { "family": "Svátek", "given": "Vojtěch" },
+      { "family": "Cruz", "given": "Isabel" },
+      { "family": "Hogan", "given": "Aidan" },
+      { "family": "Song", "given": "Jie" },
+      { "family": "Lefrançois", "given": "Maxime" },
+      { "family": "Gandon", "given": "Fabien" }
+    ],
+    "event-place": "Cham",
+    "ISBN": "978-3-030-30796-7",
+    "issued": { "date-parts": [[2019]] },
+    "language": "en",
+    "page": "146-162",
+    "publisher": "Springer International Publishing",
+    "publisher-place": "Cham",
+    "source": "Springer Link",
+    "title": "FoodKG: A Semantics-Driven Knowledge Graph for Food Recommendation",
+    "title-short": "FoodKG",
+    "type": "paper-conference"
+  },
+  {
+    "id": "liRECIPTOREffectivePretrained2020",
+    "abstract": "Recipe representation plays an important role in food computing for perception, recognition, recommendation and other applications. Learning pretrained recipe embeddings is a challenging task, as there is a lack of high quality annotated food datasets. In this paper, we provide a joint approach for learning effective pretrained recipe embeddings using both the ingredients and cooking instructions. We present Reciptor, a novel set transformer-based joint model to learn recipe representations, that preserves permutation-invariance for the ingredient set and uses a novel knowledge graph (KG) derived triplet sampling approach to optimize the learned embeddings so that related recipes are closer in the latent semantic space. The embeddings are further jointly optimized by combining similarity among cooking instructions with a KG based triplet loss. We experimentally show that Reciptor’s recipe embeddings outperform state-of-the-art baselines on two newly designed downstream classification tasks by a wide margin.",
+    "accessed": { "date-parts": [[2021, 6, 5]] },
+    "author": [
+      { "family": "Li", "given": "Diya" },
+      { "family": "Zaki", "given": "Mohammed J." }
+    ],
+    "citation-key": "liRECIPTOREffectivePretrained2020",
+    "container-title": "Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining",
+    "DOI": "10.1145/3394486.3403223",
+    "event": "KDD '20: The 26th ACM SIGKDD Conference on Knowledge Discovery and Data Mining",
+    "event-place": "Virtual Event CA USA",
+    "ISBN": "978-1-4503-7998-4",
+    "issued": { "date-parts": [[2020, 8, 23]] },
+    "language": "en",
+    "page": "1719-1727",
+    "publisher": "ACM",
+    "publisher-place": "Virtual Event CA USA",
+    "source": "DOI.org (Crossref)",
+    "title": "RECIPTOR: An Effective Pretrained Model for Recipe Representation Learning",
+    "title-short": "RECIPTOR",
+    "type": "paper-conference",
+    "URL": "https://dl.acm.org/doi/10.1145/3394486.3403223"
+  },
+  {
+    "id": "roccaIntroductionRecommenderSystems2019",
+    "abstract": "Overview of some major recommendation algorithms.",
+    "accessed": { "date-parts": [[2022, 3, 18]] },
+    "author": [{ "family": "Rocca", "given": "Baptiste" }],
+    "citation-key": "roccaIntroductionRecommenderSystems2019",
+    "container-title": "Medium",
+    "issued": { "date-parts": [[2019, 6, 12]] },
+    "language": "en",
+    "title": "Introduction to recommender systems",
+    "type": "webpage",
+    "URL": "https://towardsdatascience.com/introduction-to-recommender-systems-6c66cf15ada"
+  },
+  {
+    "id": "toscherBigChaosSolutionNetflix2009",
+    "abstract": "The team BellKor’s Pragmatic Chaos is a combined team of BellKor, Pragmatic Theory and BigChaos. BellKor consists of Robert Bell, Yehuda Koren and Chris Volinsky. The members of Pragmatic Theory",
+    "author": [
+      { "family": "Töscher", "given": "Andreas" },
+      { "family": "Jahrer", "given": "Michael" }
+    ],
+    "citation-key": "toscherBigChaosSolutionNetflix2009",
+    "issued": { "date-parts": [[2009, 1, 1]] },
+    "source": "ResearchGate",
+    "title": "The BigChaos Solution to the Netflix Grand Prize",
+    "type": "article-journal"
+  },
+  {
+    "id": "trattnerFoodRecommenderSystems2017",
+    "abstract": "The recommendation of food items is important for many reasons. Attaining cooking inspiration via digital sources is becoming evermore popular; as are systems, which recommend other types of food, such as meals in restaurants or products in supermarkets. Researchers have been studying these kinds of systems for many years, suggesting not only that can they be a means to help people find food they might want to eat, but also help them nourish themselves more healthily. This paper provides a summary of the state-of-the-art of so-called food recommender systems, highlighting both seminal and most recent approaches to the problem, as well as important specializations, such as food recommendation systems for groups of users or systems which promote healthy eating. We moreover discuss the diverse challenges involved in designing recsys for food, summarise the lessons learned from past research and outline what we believe to be important future directions and open questions for the field. In providing these contributions we hope to provide a useful resource for researchers and practitioners alike.",
+    "accessed": { "date-parts": [[2021, 6, 6]] },
+    "author": [
+      { "family": "Trattner", "given": "Christoph" },
+      { "family": "Elsweiler", "given": "David" }
+    ],
+    "citation-key": "trattnerFoodRecommenderSystems2017",
+    "container-title": "arXiv:1711.02760 [cs]",
+    "issued": { "date-parts": [[2017, 11, 10]] },
+    "source": "arXiv.org",
+    "title": "Food Recommender Systems: Important Contributions, Challenges and Future Research Directions",
+    "title-short": "Food Recommender Systems",
+    "type": "article-journal",
+    "URL": "http://arxiv.org/abs/1711.02760"
+  }
 ]

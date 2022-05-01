@@ -63,7 +63,7 @@ export class Citation extends HTMLElement {
       et_al_ify(this._bibData.author) +
       " " +
       this._citeStyle.enclosing[0] +
-      this._citeStyle.identifier(this._bibIndex, this._bibData, this.citeType) +
+      this._citeStyle.identifier(this._bibData, this._bibIndex, this.citeType) +
       this._citeStyle.enclosing[1] +
       `</a>`
     );
@@ -71,7 +71,7 @@ export class Citation extends HTMLElement {
   render_raw_cite() {
     return (
       `<a href=#${this.key}>` +
-      this._citeStyle.identifier(this._bibIndex, this._bibData, this.citeType) +
+      this._citeStyle.identifier(this._bibData, this._bibIndex, this.citeType) +
       "</a>"
     );
   }

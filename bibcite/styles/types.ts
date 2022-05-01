@@ -9,9 +9,10 @@ export type CiteStyle = {
   order: BibOrder;
   enclosing: [string, string];
   multiSeparator: string;
-  identifier: (index: number, bib_data: Data, citeType: CiteType) => string;
-  bib_entry: (index: number, bib_data: Data) => string;
-  reference: (content: string) => string;
+  identifier: (bib_data: Data,index: number, citeType: CiteType) => string;
+  bib_entry: (bib_data: Data) => string;
+  metaBibEntry: (bibEntry:string, identifier:string) => string;
+  metaReference: (content: string) => string;
 };
 
 export function isCiteType(test: string): test is CiteType {
