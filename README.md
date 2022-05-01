@@ -11,7 +11,10 @@ BibTeX or BibLaTeX like citation for HTML.
 1. Export your library from your favorite reference management software (e.g.
 [Zotero][zotero]) in the CSL-JSON format ([Detailed
 Explanation][export-csl-explanation]).
-2. Obtain the Javascript file of Bibcite ([e.g. from JSDelivr][releases])
+2. Obtain the Javascript file of Bibcite ([e.g. from JSDelivr][releases]) looking like this
+  
+    > https://cdn.jsdelivr.net/npm/bibcite@1.0/dist/bibcite.min.js
+
 3. Assuming you have an exported `csl-json` file, which we are going to call
 `references.json` from now on (but you can use any other filename). And a link
 to the JS file of `bibcite` (here called `bibcite.js`) you can do the following in
