@@ -23,11 +23,6 @@ jobs:
         # with:
           # submodules: true  # Fetch submodules (true OR recursive)
           # fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-      - name: Checkout Release Branch
-        uses: actions/checkout@v3
-        with:
-          ref: releases
-          path: releases
       
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -42,7 +37,7 @@ jobs:
         run: npm run build
       
       - name: Release
-        run: npx semantic-release --dry-run
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
