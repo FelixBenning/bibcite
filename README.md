@@ -1,4 +1,4 @@
-
+[![](https://data.jsdelivr.com/v1/package/npm/bibcite/badge)](https://www.jsdelivr.com/package/npm/bibcite)
 # Bibcite
 
 BibTeX or BibLaTeX like citation for HTML.
@@ -11,8 +11,7 @@ BibTeX or BibLaTeX like citation for HTML.
 1. Export your library from your favorite reference management software (e.g.
 [Zotero][zotero]) in the CSL-JSON format ([Detailed
 Explanation][export-csl-explanation]).
-2. Obtain the Javascript file of Bibcite ([See
-Releases][releases])
+2. Obtain the Javascript file of Bibcite ([e.g. from JSDelivr][releases])
 3. Assuming you have an exported `csl-json` file, which we are going to call
 `references.json` from now on (but you can use any other filename). And a link
 to the JS file of `bibcite` (here called `bibcite.js`) you can do the following in
@@ -103,5 +102,5 @@ I still need to figure out how to do plugin loading here though.
 
 [zotero]: https://www.zotero.org/
 [export-csl-explanation]: https://github.com/FelixBenning/bibcite/blob/main/docs/export-csl-json.md
-[releases]: https://github.com/FelixBenning/bibcite/tree/releases
+[releases]: https://www.jsdelivr.com/package/npm/bibcite
 [npm-bibcite]: https://www.npmjs.com/package/bibcite
