@@ -39,15 +39,33 @@ export function tabularBibEntry(bibEntry: string, identifier: string) {
 export function paragraphBibEntry(bibEntry: string) {
   return `<p>${bibEntry}</p>`;
 }
+export function authorYearBibEntry(cslData: Data) {
+  return `
+    <span>${author_list(cslData.author)}</span>
+    <span>(${iso_date(cslData.issued["date-parts"][0])}).</span>
+    ` + where_to_find(cslData);
+}
 
 export function defaultBibEntry(csl_data: Data) {
   return `<strong>${csl_data.title}</strong> ${directLink(csl_data)}
     <br>
       <span>${author_list(csl_data.author)}</span>
-      <span>(${csl_data.issued["date-parts"][0][0]})</span>
+      <span>(${iso_date(csl_data.issued["date-parts"][0])})</span>
     <br>
       <span>${where_to_find(csl_data)}
     `;
+}
+
+function iso_date(date){
+  return date.map(d=>String(d)).join("-")
+}
+
+export function tabularReferences(content:string): string{
+  return `<h2>References</h2>
+  <table>
+    ${content}
+  </table>
+  `;
 }
 
 function author_list(authors: Person[]): string {

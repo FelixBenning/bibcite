@@ -1,4 +1,5 @@
 import { alphabetic } from "./alphabetic";
+import { authorYear } from "./author-year";
 import { numeric } from "./numeric";
 import { CiteStyle } from "./types";
 
@@ -12,3 +13,4 @@ export function addStyle(sty: CiteStyle) {
 // default styles
 addStyle(numeric);
 addStyle(alphabetic);
+addStyle(authorYear);

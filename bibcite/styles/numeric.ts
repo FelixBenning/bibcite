@@ -1,7 +1,7 @@
 import { Data } from "csl-json";
 import { CiteStyle } from "./types";
 import { insertion } from "../order";
-import { defaultBibEntry, tabularBibEntry } from "./helpers";
+import { defaultBibEntry, tabularBibEntry, tabularReferences } from "./helpers";
 
 export const numeric: CiteStyle = {
   name: "numeric",
@@ -11,10 +11,5 @@ export const numeric: CiteStyle = {
   identifier: (_: Data, index: number) => String(index),
   bib_entry: defaultBibEntry,
   metaBibEntry: tabularBibEntry,
-  metaReference: (content: string) =>
-    `<h2>References</h2>
-  <table>
-    ${content}
-  </table>
-  `,
+  metaReference: tabularReferences
 };

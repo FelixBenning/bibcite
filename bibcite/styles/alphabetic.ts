@@ -1,20 +1,23 @@
-import { Data } from "csl-json";
-import { nameYearTitle } from "../order";
 import { CiteStyle } from "./types";
-import { alphabetic_identifier, defaultBibEntry, tabularBibEntry } from "./helpers";
+import {
+  alphabetic_identifier,
+  defaultBibEntry,
+  tabularBibEntry,
+  tabularReferences,
+} from "./helpers";
+import { Data } from "csl-json";
 
 export const alphabetic: CiteStyle = {
   name: "alphabetic",
-  order: { comparison: nameYearTitle, inform_citations: false },
+  order: {
+    comparison: (c1: Data, c2: Data) =>
+      alphabetic_identifier(c1).localeCompare(alphabetic_identifier(c2)),
+    inform_citations: false,
+  },
   identifier: alphabetic_identifier,
   enclosing: ["[", "]"],
   multiSeparator: ";",
   bib_entry: defaultBibEntry,
   metaBibEntry: tabularBibEntry,
-  metaReference: (content: string) =>
-    `<h2>References</h2>
-  <table>
-    ${content}
-  </table>
-  `,
+  metaReference: tabularReferences,
 };
