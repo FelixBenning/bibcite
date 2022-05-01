@@ -6,19 +6,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Citation Example</title>
 	<script src="bibcite.js"></script>
-	<bib-config bib="references.json" citation-style="alphabetic"></bib-config>
+	<bib-config bib="references.json" citation-style="author-year"></bib-config>
 </head>
 <body>
 	<article>
 		<h1>My Page</h1>	
-		<p> There is the concept of parenthetical Citations
+		<p> The next two citations are <code>paren-cite</code> citations
 			<bib-cite type="paren-cite" key="mas-colellMicroeconomicTheory1995"></bib-cite>
-			<bib-cite type="paren-cite" key="amirEffectsEntryCournot2000"></bib-cite>,
-			but with
+			<bib-cite type="paren-cite" key="amirEffectsEntryCournot2000"></bib-cite>.
+		</p>
+		<p>
+			The following is a <code>text-cite</code> allowing you to use the name in text
 			<bib-cite type="text-cite" key="mas-colellMicroeconomicTheory1995"></bib-cite>.
-			now again
-			<bib-cite type="paren-cite" key="amirEffectsEntryCournot2000"></bib-cite>
-			<bib-cite type="paren-cite" key="dsouzaParserExtractionTriples2018"></bib-cite>,
+		</p>
+		<p>
+			And the remaining two are <code>raw-cite</code>
+			<bib-cite type="raw-cite" key="amirEffectsEntryCournot2000"></bib-cite>
+			<bib-cite type="raw-cite" key="dsouzaParserExtractionTriples2018"></bib-cite>,
 		</p>
 
 		<bib-references></bib-references>

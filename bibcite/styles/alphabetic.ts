@@ -17,7 +17,7 @@ export const alphabetic: CiteStyle = {
   identifier: alphabetic_identifier,
   enclosing: ["[", "]"],
   multiSeparator: ";",
-  bib_entry: defaultBibEntry,
+  bibEntry: defaultBibEntry,
   metaBibEntry: tabularBibEntry,
   metaReference: tabularReferences,
 };

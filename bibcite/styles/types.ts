@@ -10,7 +10,7 @@ export type CiteStyle = {
   enclosing: [string, string];
   multiSeparator: string;
   identifier: (bib_data: Data,index: number, citeType: CiteType) => string;
-  bib_entry: (bib_data: Data) => string;
+  bibEntry: (bib_data: Data) => string;
   metaBibEntry: (bibEntry:string, identifier:string) => string;
   metaReference: (content: string) => string;
 };

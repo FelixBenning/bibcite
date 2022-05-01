@@ -15,7 +15,7 @@ export const authorYear: CiteStyle = {
   },
   enclosing: ["(", ")"],
   multiSeparator: ";",
-  bib_entry: authorYearBibEntry,
+  bibEntry: authorYearBibEntry,
   metaBibEntry: paragraphBibEntry,
   metaReference: (content:string) => `<h2>References</h2>${content}`,
 };

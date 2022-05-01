@@ -9,7 +9,7 @@ export const numeric: CiteStyle = {
   enclosing: ["[", "]"],
   multiSeparator: ",",
   identifier: (_: Data, index: number) => String(index),
-  bib_entry: defaultBibEntry,
+  bibEntry: defaultBibEntry,
   metaBibEntry: tabularBibEntry,
   metaReference: tabularReferences
 };

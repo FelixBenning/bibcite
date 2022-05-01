@@ -39,7 +39,7 @@ export class BibReference extends HTMLElement {
       this._usedReferences
         .map((ref) =>
           this._citeStyle.metaBibEntry(
-            this._citeStyle.bib_entry(ref.csl_data),
+            this._citeStyle.bibEntry(ref.csl_data),
             this._citeStyle.identifier(ref.csl_data, ref.index, "raw-cite")
           )
         )

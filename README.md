@@ -52,6 +52,58 @@ an html file
 	<bib-cite key="id_key" type="text-cite"></bib-cite>
 	```
 
+### Examples
+
+The following body
+
+```html
+		<h1>My Page</h1>	
+		<p> The next two citations are <code>paren-cite</code> citations
+			<bib-cite type="paren-cite" key="mas-colellMicroeconomicTheory1995"></bib-cite>
+			<bib-cite type="paren-cite" key="amirEffectsEntryCournot2000"></bib-cite>.
+		</p>
+		<p>
+			The following is a <code>text-cite</code> allowing you to use the name in text
+			<bib-cite type="text-cite" key="mas-colellMicroeconomicTheory1995"></bib-cite>.
+		</p>
+		<p>
+			And the remaining two are <code>raw-cite</code>
+			<bib-cite type="raw-cite" key="amirEffectsEntryCournot2000"></bib-cite>
+			<bib-cite type="raw-cite" key="dsouzaParserExtractionTriples2018"></bib-cite>,
+		</p>
+
+		<bib-references></bib-references>
+```
+
+depending on the selected style results in the following pages.
+
+#### Alphabetic style (Default)
+
+```html
+<bib-config bib="references.json" citation-style="alphabetic"></bib-config>
+```
+
+![alphabetic style](docs/img/alphabetic.png)
+
+#### Numeric style
+
+```html
+<bib-config bib="references.json" citation-style="numeric"></bib-config>
+```
+
+![numeric style](docs/img/numeric.png)
+
+#### Author-Year Style
+
+
+```html
+<bib-config bib="references.json" citation-style="author-year"></bib-config>
+```
+
+![author-year style](docs/img/author-year.png)
+
+
+
 ## Node Module
 
 You can find [`bibcite` on npm][npm-bibcite].
@@ -62,45 +114,53 @@ There will be a way to do customization in the future. Styles are Typescript
 types
 
 ```typescript
-type CiteStyle = {
+// bibcite/styles/types.ts
+export type CiteStyle = {
   name: string;
   order: BibOrder;
   enclosing: [string, string];
   multiSeparator: string;
-  identifier: (index: number, bib_data: Data, citeType: CiteType) => string;
-  bib_entry: (index: number, bib_data: Data) => string;
-  reference: (content: string) => string;
+  identifier: (bib_data: Data,index: number, citeType: CiteType) => string;
+  bibEntry: (bib_data: Data) => string;
+  metaBibEntry: (bibEntry:string, identifier:string) => string;
+  metaReference: (content: string) => string;
 };
 ```
 
-so the numeric style for example is implemented like this:
+so the numeric style for example is implemented roughly like this:
 
 ```typescript
+//bibcite/styles/numeric.ts
 export const numeric: CiteStyle = {
   name: "numeric",
   order: { comparison: insertion, inform_citations: true },
   enclosing: ["[", "]"],
   multiSeparator: ",",
-  identifier: (index: number, _: Data) => String(index),
-  bib_entry: (index: number, bib_data: Data) => `
-    <tr>
-      <td>[${index}]</td>
-      <td>
-        <h3>${bib_data.title}</h3>
-        <span>${bib_data.author.map((p) => p.family).join(", ")}</span>
-        <span>(${bib_data.issued["date-parts"][0][0]})</span>
-      </td>
+  identifier: (_: Data, index: number) => String(index),
+  bibEntry: defaultBibEntry,
+  metaBibEntry: (bibEntry:string, identifier:string) => `
+    <tr style="vertical-align:top">
+        <td>[${identifier}]</td>
+        <td>${bibEntry}</td>
     </tr>
-  `,
-  reference: (content: string) =>
+    `,
+  metaReference: (content: string) =>
     `<h2>References</h2>
-  <table>
-    ${content}
-  </table>
-  `,
+    <table>
+      ${content}
+    </table>
+    `,
 };
 ```
 
+and then added
+
+```typescript
+//bibcite/ctyles/index.ts
+addStyle(numeric);
+```
+
+So similarly you should be able to define your own custom styles.
 I still need to figure out how to do plugin loading here though.
 
 [zotero]: https://www.zotero.org/
